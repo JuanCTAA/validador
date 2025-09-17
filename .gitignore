@@ -11,6 +11,3 @@ dist
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Performance test results
-test/performance/performance-history.json
