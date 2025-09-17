@@ -1,18 +1,18 @@
-const express = require('express');
+const express = require('express')
 
-const validatePdf = require('./routes/validate-pdf');
-const swaggerApi = require('./routes/swagger-ui');
+const validatePdf = require('./routes/validate-pdf')
+const swaggerApi = require('./routes/swagger-ui')
 
-const app = express();
+const app = express()
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000
 
-app.use(swaggerApi);
+app.use(swaggerApi)
 
-app.use(validatePdf);
+app.use(validatePdf)
 
 app.listen(port, () => {
-	console.log('Server is up on port ' + port);
-});
+  console.log('Server is up on port ' + port)
+})
 
-module.exports = app;
+module.exports = app
