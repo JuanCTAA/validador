@@ -189,6 +189,24 @@ Results include:
 
 For detailed information, see [Performance Testing Guide](docs/performance-testing.md).
 
+## Performance Results
+
+Last updated: TBD
+
+### Summary
+- **Total tests run**: TBD
+- **Average duration**: TBD ms
+- **Fastest test**: TBD
+- **Slowest test**: TBD
+
+### Recent Test Results
+
+| Date | File | Size (KB) | Duration (ms) | Valid | Commit |
+|------|------|-----------|---------------|-------|--------|
+| TBD | TBD | TBD | TBD | TBD | TBD |
+
+*Performance results are automatically updated by GitHub Actions after each test run.*
+
 ## Development
 
 ### Testing
