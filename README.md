@@ -12,28 +12,29 @@ The PDF Validation API is a Node.js Express API that provides a simple endpoint 
 
 
 
+
 ## Performance Results
 
 ### Summary
-- **Total tests run**: 64
-- **Average duration**: 3610.27ms
-- **Fastest test**: Asdasdasd.pdf (68.51ms)
-- **Slowest test**: EJEMPLO 2 CON HOJAS EN BLANCO.pdf (37210.90ms)
+- **Total tests run**: 128
+- **Average duration**: 6106.35ms
+- **Fastest test**: valid_014_165mbs.pdf (52.22ms)
+- **Slowest test**: valid_003_373mbs.pdf (114880.79ms)
 
 ### Recent Test Results
 
 | File | Size (KB) | Duration (ms) | Performance Change |
 |------|-----------|--------------------|--------------------|
-| LIBRO ORDENES.pdf | 4052.9 | 1472.75 | N/A |
-| PROYECTO_BASICO_Y_EJECUCION_CALLE_AGRET6_SUBSA2_signed.pdf | 15997.8 | 4880.15 | N/A |
-| PROYECTO_EJECUTIVO_ANEXOS_2_mxc.pdf | 5753.8 | 2742.22 | N/A |
-| valid.pdf | 67.8 | 123.69 | N/A |
-| Asdasdasd.pdf | 33.7 | 119.42 | N/A |
-| EJEMPLO 1 CON HOJAS EN BLANCO.pdf | 44748.3 | 11888.02 | N/A |
-| EJEMPLO 2 CON HOJAS EN BLANCO.pdf | 61788.4 | 37210.90 | 🔴 111.3% slower |
-| EJEMPLO 3 CON MAS DE UNA HOJA.pdf | 14974.5 | 4899.83 | 🔴 73.6% slower |
-| NAVE_JACARILLA_firmado.pdf | 4262.3 | 1359.58 | 🔴 69.8% slower |
-| invalid2.pdf | 12.8 | 171.20 | 🔴 57.8% slower |
+| valid_023_6mbs.pdf | 0.1 | 53.95 | N/A |
+| valid_024_0mbs.pdf | 0.1 | 58.64 | N/A |
+| invalid_001_7mbs.pdf | 0.1 | 52.66 | N/A |
+| invalid_002_20mbs.pdf | 0.1 | 53.79 | N/A |
+| invalid_003_0mbs.pdf | 0.1 | 56.92 | N/A |
+| invalid_004_44mbs.pdf | 0.1 | 53.48 | N/A |
+| invalid_005_60mbs.pdf | 0.1 | 57.57 | N/A |
+| invalid_006_15mbs.pdf | 0.1 | 52.93 | N/A |
+| invalid_007_4mbs.pdf | 0.1 | 53.23 | N/A |
+| invalid_008_0mbs.pdf | 0.1 | 60.77 | N/A |
 
 *Performance results are automatically updated by GitHub Actions after each test run.*
 
