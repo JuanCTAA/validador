@@ -1,0 +1,203 @@
+name: Performance Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+
+jobs:
+  performance-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Get full git history for performance comparison
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Ghostscript
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ghostscript
+          gs --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Download previous performance history
+        uses: actions/download-artifact@v4
+        with:
+          name: performance-history-node-${{ matrix.node-version }}
+          path: test/performance/
+        continue-on-error: true # Don't fail if no previous history exists
+
+      - name: Run performance tests
+        run: npm run test:perf
+        env:
+          NODE_ENV: test
+
+      - name: Generate performance report
+        run: |
+          echo "## Performance Test Results - Node.js ${{ matrix.node-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f test/performance/performance-history.json ]; then
+            echo "### Summary" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat test/performance/performance-history.json | jq '.summary' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Recent Results (Last 5)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat test/performance/performance-history.json | jq '.results[-5:]' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No performance history file found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload performance history
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-history-node-${{ matrix.node-version }}
+          path: test/performance/performance-history.json
+          retention-days: 90
+        if: always()
+
+      - name: Check for performance regression
+        run: |
+          if [ -f test/performance/performance-history.json ]; then
+            node -e "
+              const fs = require('fs');
+              const history = JSON.parse(fs.readFileSync('test/performance/performance-history.json', 'utf8'));
+
+              if (history.results.length < 2) {
+                console.log('Not enough data for regression analysis');
+                process.exit(0);
+              }
+
+              const results = history.results;
+              const currentRun = results.slice(-1)[0];
+              const previousRun = results.slice(-2, -1)[0];
+
+              if (!currentRun || !previousRun) {
+                console.log('Unable to compare runs');
+                process.exit(0);
+              }
+
+              const currentAvg = currentRun.duration;
+              const previousAvg = previousRun.duration;
+              const regressionThreshold = 20; // 20% slower is considered a regression
+
+              const changePercent = ((currentAvg - previousAvg) / previousAvg) * 100;
+
+              console.log(\`Performance change: \${changePercent.toFixed(2)}%\`);
+
+              if (changePercent > regressionThreshold) {
+                console.error(\`❌ Performance regression detected: \${changePercent.toFixed(2)}% slower\`);
+                console.error(\`Current: \${currentAvg.toFixed(2)}ms, Previous: \${previousAvg.toFixed(2)}ms\`);
+                process.exit(1);
+              } else if (changePercent < -5) {
+                console.log(\`🎉 Performance improvement: \${Math.abs(changePercent).toFixed(2)}% faster\`);
+              } else {
+                console.log(\`✅ Performance is stable\`);
+              }
+            "
+          else
+            echo "No performance history available for regression check"
+          fi
+
+      - name: Comment on PR with performance results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            if (!fs.existsSync('test/performance/performance-history.json')) {
+              console.log('No performance history found');
+              return;
+            }
+
+            const history = JSON.parse(fs.readFileSync('test/performance/performance-history.json', 'utf8'));
+            const summary = history.summary;
+
+            const comment = `## 🚀 Performance Test Results (Node.js ${{ matrix.node-version }})
+
+            **Summary:**
+            - Total tests: ${summary.totalTests}
+            - Average duration: ${summary.averageDuration.toFixed(2)}ms
+            - Fastest test: ${summary.fastestTest.filename} (${summary.fastestTest.duration.toFixed(2)}ms)
+            - Slowest test: ${summary.slowestTest.filename} (${summary.slowestTest.duration.toFixed(2)}ms)
+
+            **Last run:** ${summary.lastRun}
+
+            <details>
+            <summary>View detailed results</summary>
+
+            \`\`\`json
+            ${JSON.stringify(history.results.slice(-3), null, 2)}
+            \`\`\`
+
+            </details>`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  aggregate-results:
+    runs-on: ubuntu-latest
+    needs: performance-tests
+    if: always()
+
+    steps:
+      - name: Download all performance artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: performance-history-node-*
+          merge-multiple: true
+          path: artifacts/
+
+      - name: Create combined performance report
+        run: |
+          echo "# Combined Performance Test Results" >> combined-report.md
+          echo "" >> combined-report.md
+          echo "Date: $(date)" >> combined-report.md
+          echo "Commit: ${{ github.sha }}" >> combined-report.md
+          echo "" >> combined-report.md
+
+          for file in artifacts/*.json; do
+            if [ -f "$file" ]; then
+              node_version=$(basename "$file" | sed 's/performance-history-node-//' | sed 's/.json//')
+              echo "## Node.js $node_version" >> combined-report.md
+              echo '```json' >> combined-report.md
+              cat "$file" | jq '.summary' >> combined-report.md
+              echo '```' >> combined-report.md
+              echo "" >> combined-report.md
+            fi
+          done
+
+      - name: Upload combined report
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-performance-report
+          path: combined-report.md
+          retention-days: 30

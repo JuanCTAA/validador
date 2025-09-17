@@ -146,4 +146,62 @@ http://localhost:3000/api-docs
 
 By using `pm2`, you can ensure that your API runs continuously, automatically recovers from crashes, and starts at boot, providing a robust and reliable service.
 
+## Performance Testing
+
+This project includes comprehensive performance testing to monitor and improve PDF validation speed over time. Performance tests measure validation duration and track results historically.
+
+### Running Performance Tests
+
+```bash
+# Run performance tests locally
+npm run test:perf
+
+# Run performance tests in watch mode (for development)
+npm run test:perf:watch
+
+# View performance history summary (requires jq)
+npm run perf:history
+```
+
+### Automated Performance Testing
+
+Performance tests run automatically in GitHub Actions:
+
+- **On push/PR** to main or develop branches
+- **Daily at 2 AM UTC** (scheduled runs)
+- **Manual triggers** via GitHub Actions UI
+
+The CI system:
+- Tests on multiple Node.js versions (18.x, 20.x)
+- Detects performance regressions (>20% slower)
+- Stores performance history as artifacts
+- Comments on PRs with performance results
+- Generates combined performance reports
+
+### Performance Data
+
+Results include:
+- Validation duration per PDF
+- File size correlation
+- Git commit tracking
+- System information
+- Historical trends and comparisons
+
+For detailed information, see [Performance Testing Guide](docs/performance-testing.md).
+
+## Development
+
+### Testing
+
+```bash
+# Run functional tests
+npm test
+
+# Run performance tests
+npm run test:perf
+
+# Run all tests
+npm test && npm run test:perf
+```
+
 
