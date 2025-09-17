@@ -18,9 +18,6 @@ interface PerformanceResult {
 interface PerformanceSummary {
   lastRun: string
   totalTests: number
-  averageDuration: number
-  fastestTest: { filename: string; duration: number }
-  slowestTest: { filename: string; duration: number }
 }
 
 interface PerformanceHistory {
@@ -71,12 +68,6 @@ function updateReadmeWithPerformanceResults(): void {
     let table = '## Performance Results\n\n'
     table += '### Summary\n'
     table += '- **Total tests run**: ' + summary.totalTests + '\n'
-    table += '- **Average duration**: ' + summary.averageDuration.toFixed(2) + 'ms\n'
-    table +=
-      '- **Fastest test**: ' + summary.fastestTest.filename + ' (' + summary.fastestTest.duration.toFixed(2) + 'ms)\n'
-    table +=
-      '- **Slowest test**: ' + summary.slowestTest.filename + ' (' + summary.slowestTest.duration.toFixed(2) + 'ms)\n\n'
-
     table += '### Recent Test Results\n\n'
     table += '| File | Size (KB) | Duration (ms) | Performance Change |\n'
     table += '|------|-----------|--------------------|--------------------|' + '\n'

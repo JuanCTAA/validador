@@ -18,9 +18,6 @@ interface PerformanceResult {
 interface PerformanceSummary {
   lastRun: string
   totalTests: number
-  averageDuration: number
-  fastestTest: { filename: string; duration: number }
-  slowestTest: { filename: string; duration: number }
 }
 
 interface PerformanceHistory {

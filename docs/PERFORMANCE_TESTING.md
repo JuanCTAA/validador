@@ -70,10 +70,7 @@ Results are stored in `test/performance/performance-history.json` with:
   ],
   "summary": {
     "lastRun": "2024-01-15T10:30:00.000Z",
-    "totalTests": 50,
-    "averageDuration": 1200.5,
-    "fastestTest": { "filename": "small.pdf", "duration": 500.1 },
-    "slowestTest": { "filename": "large.pdf", "duration": 3000.8 }
+    "totalTests": 50
   }
 }
 ```

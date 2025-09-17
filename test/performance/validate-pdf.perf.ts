@@ -22,9 +22,6 @@ interface PerformanceHistory {
   summary: {
     lastRun: string
     totalTests: number
-    averageDuration: number
-    fastestTest: { filename: string; duration: number }
-    slowestTest: { filename: string; duration: number }
   }
 }
 
@@ -57,9 +54,6 @@ function loadPerformanceHistory(): PerformanceHistory {
       summary: {
         lastRun: '',
         totalTests: 0,
-        averageDuration: 0,
-        fastestTest: { filename: '', duration: Infinity },
-        slowestTest: { filename: '', duration: 0 },
       },
     }
   }
@@ -72,9 +66,6 @@ function loadPerformanceHistory(): PerformanceHistory {
       summary: {
         lastRun: '',
         totalTests: 0,
-        averageDuration: 0,
-        fastestTest: { filename: '', duration: Infinity },
-        slowestTest: { filename: '', duration: 0 },
       },
     }
   }
@@ -95,15 +86,6 @@ function updateSummary(history: PerformanceHistory): void {
   const currentRun = history.results[history.results.length - 1]
   history.summary.lastRun = currentRun!.timestamp
   history.summary.totalTests = history.results.length
-
-  const durations = history.results.map((r) => r.duration)
-  history.summary.averageDuration = durations.reduce((a, b) => a + b, 0) / durations.length
-
-  const fastest = history.results.reduce((min, current) => (current.duration < min.duration ? current : min))
-  history.summary.fastestTest = { filename: fastest.filename, duration: fastest.duration }
-
-  const slowest = history.results.reduce((max, current) => (current.duration > max.duration ? current : max))
-  history.summary.slowestTest = { filename: slowest.filename, duration: slowest.duration }
 }
 
 async function measurePerformance(
