@@ -56,9 +56,19 @@ function updateReadmeWithPerformanceResults(): void {
     const recentResults = history.results.slice(-10)
     const summary = history.summary
 
+    // Get previous results for comparison
+    const previousResults = history.results.slice(-20, -10) // Get 10 results before the recent ones
+    const createResultsMap = (results: PerformanceResult[]) => {
+      const map = new Map<string, number>()
+      results.forEach((result) => {
+        map.set(result.filename, result.duration)
+      })
+      return map
+    }
+    const previousResultsMap = createResultsMap(previousResults)
+
     // Generate performance table
     let table = '## Performance Results\n\n'
-    table += 'Last updated: ' + summary.lastRun + '\n\n'
     table += '### Summary\n'
     table += '- **Total tests run**: ' + summary.totalTests + '\n'
     table += '- **Average duration**: ' + summary.averageDuration.toFixed(2) + 'ms\n'
@@ -68,19 +78,31 @@ function updateReadmeWithPerformanceResults(): void {
       '- **Slowest test**: ' + summary.slowestTest.filename + ' (' + summary.slowestTest.duration.toFixed(2) + 'ms)\n\n'
 
     table += '### Recent Test Results\n\n'
-    table += '| Date | File | Size (KB) | Duration (ms) | Valid | Commit |\n'
-    table += '|------|------|-----------|---------------|-------|--------|\n'
+    table += '| File | Size (KB) | Duration (ms) | Performance Change |\n'
+    table += '|------|-----------|--------------------|--------------------|' + '\n'
 
     recentResults.forEach((result: PerformanceResult) => {
-      const date = new Date(result.timestamp).toISOString().split('T')[0]
       const sizeKB = (result.fileSize / 1024).toFixed(1)
-      const shortCommit = result.gitCommit ? result.gitCommit.substring(0, 7) : 'unknown'
-      const validIcon = result.isValid ? '✅' : '❌'
 
-      table += `| ${date} | ${result.filename} | ${sizeKB} | ${result.duration.toFixed(2)} | ${validIcon} | ${shortCommit} |\n`
+      // Calculate performance change
+      let performanceChange = 'N/A'
+      const previousDuration = previousResultsMap.get(result.filename)
+      if (previousDuration) {
+        const changePercent = ((result.duration - previousDuration) / previousDuration) * 100
+        if (changePercent > 5) {
+          performanceChange = `🔴 ${changePercent.toFixed(1)}% slower`
+        } else if (changePercent < -5) {
+          performanceChange = `🟢 ${Math.abs(changePercent).toFixed(1)}% faster`
+        } else {
+          performanceChange = `⚪ ${Math.abs(changePercent).toFixed(1)}% similar`
+        }
+      }
+
+      table += `| ${result.filename} | ${sizeKB} | ${result.duration.toFixed(2)} | ${performanceChange} |\n`
     })
 
     table += '\n*Performance results are automatically updated by GitHub Actions after each test run.*\n'
+    table += '\n*Performance changes are compared to the previous test run for the same file.*\n'
 
     // Write temporary table file
     const tempTableFile = 'performance-table.md'
@@ -96,39 +118,57 @@ function updateReadmeWithPerformanceResults(): void {
     const readmeContent = fs.readFileSync(README_FILE, 'utf8')
 
     let updatedContent: string
-    if (readmeContent.includes('## Performance Results')) {
-      console.log('📝 Replacing existing performance section in README')
+    const lines = readmeContent.split('\n')
+    const newLines: string[] = []
+    let performanceInserted = false
 
-      // Replace existing performance section
-      const lines = readmeContent.split('\n')
-      const newLines: string[] = []
-      let inPerformanceSection = false
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i]
-
-        if (line?.startsWith('## Performance Results')) {
-          inPerformanceSection = true
-          // Insert the new table content
-          const tableLines = table.split('\n')
-          newLines.push(...tableLines)
-        } else if (line?.startsWith('## ') && inPerformanceSection) {
-          // We've reached the next section
-          inPerformanceSection = false
-          newLines.push(line)
-        } else if (!inPerformanceSection) {
-          newLines.push(line!)
+      // Skip existing performance section if it exists
+      if (line?.startsWith('## Performance Results')) {
+        let j = i + 1
+        // Skip all lines until the next section or end of file
+        while (j < lines.length && !lines[j]?.startsWith('## ')) {
+          j++
         }
-        // Skip lines that are part of the old performance section
+        i = j - 1 // Will be incremented by the loop
+        continue
       }
 
-      updatedContent = newLines.join('\n')
-    } else {
-      console.log('📝 Appending performance section to README')
+      newLines.push(line!)
 
-      // Append performance section at the end
-      updatedContent = readmeContent.trimEnd() + '\n\n' + table
+      // Insert performance table after Overview section
+      if (line?.startsWith('## Overview') && !performanceInserted) {
+        // Find the end of the Overview section
+        let j = i + 1
+        while (j < lines.length && !lines[j]?.startsWith('## ')) {
+          newLines.push(lines[j]!)
+          j++
+        }
+
+        // Insert performance table
+        newLines.push('')
+        const tableLines = table.split('\n')
+        newLines.push(...tableLines)
+        performanceInserted = true
+
+        // Set i to continue from the next section
+        i = j - 1 // Will be incremented by the loop
+      }
     }
+
+    // If performance section wasn't inserted (no Overview section found), append at end
+    if (!performanceInserted) {
+      console.log('📝 No Overview section found, appending performance section to README')
+      newLines.push('')
+      const tableLines = table.split('\n')
+      newLines.push(...tableLines)
+    } else {
+      console.log('📝 Inserted performance section after Overview in README')
+    }
+
+    updatedContent = newLines.join('\n')
 
     // Write updated README
     fs.writeFileSync(README_FILE, updatedContent)
