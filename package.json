@@ -11,12 +11,15 @@
     }
   ],
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "build": "tsc",
+    "compile": "tsc --noEmit",
+    "start": "node dist/app.js",
+    "start:ts": "ts-node --esm app.ts",
+    "dev": "ts-node --esm app.ts",
+    "dev:watch": "nodemon --exec ts-node --esm app.ts",
     "test": "vitest run",
-    "test:watch": "vitest",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "check": "biome check .",
@@ -32,8 +35,16 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
+    "@types/express": "5.0.3",
+    "@types/multer": "2.0.0",
+    "@types/node": "24.5.1",
+    "@types/supertest": "6.0.3",
+    "@types/swagger-jsdoc": "6.0.4",
+    "@types/swagger-ui-express": "4.1.8",
     "lefthook": "1.13.0",
     "supertest": "7.1.4",
+    "ts-node": "10.9.2",
+    "typescript": "5.9.2",
     "vitest": "3.2.4"
   }
 }

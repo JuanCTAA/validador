@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 import fs from 'fs'
 
-export const hasEmptyPagesGhostscript = async (inputFile) => {
+export const hasEmptyPagesGhostscript = async (inputFile: string): Promise<boolean> => {
   try {
     checkGhostscriptInstalled()
     console.log(`Checking for empty pages in ${inputFile}`)
@@ -19,12 +19,13 @@ export const hasEmptyPagesGhostscript = async (inputFile) => {
       return false
     }
   } catch (error) {
-    console.error(`Error checking for empty pages: ${error.message}`)
-    throw new Error(`Error checking for empty pages: ${error.message}`)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error(`Error checking for empty pages: ${errorMessage}`)
+    throw new Error(`Error checking for empty pages: ${errorMessage}`)
   }
 }
 
-function checkGhostscriptInstalled() {
+function checkGhostscriptInstalled(): void {
   try {
     execSync('gs --version', { stdio: 'ignore' })
   } catch (error) {
@@ -33,7 +34,7 @@ function checkGhostscriptInstalled() {
   }
 }
 
-function getEmptyPages(inputFile) {
+function getEmptyPages(inputFile: string): string[] {
   const emptyPagesCmd = `gs -o - -sDEVICE=inkcov "${inputFile}" | grep -B 1 "^ 0.000[01][[:digit:]]  0.000[01][[:digit:]]  0.000[01][[:digit:]]  0.000[01]" | grep 'Page' | awk '{print $2}'`
   console.log('Executing emptyPagesCmd')
   return execSync(emptyPagesCmd, { encoding: 'utf8' })
@@ -42,8 +43,8 @@ function getEmptyPages(inputFile) {
     .filter((page) => page !== '') // remove the ones that are empty spaces ''
 }
 
-function checkPagesForText(inputFile, emptyPages) {
-  const trulyEmptyPages = []
+function checkPagesForText(inputFile: string, emptyPages: string[]): string[] {
+  const trulyEmptyPages: string[] = []
   for (const emptyPage of emptyPages) {
     console.log(`Checking if empty page ${emptyPage} has text`)
     const textOutput = getTextFromPage(inputFile, emptyPage)
@@ -57,7 +58,7 @@ function checkPagesForText(inputFile, emptyPages) {
   return trulyEmptyPages
 }
 
-function getTextFromPage(inputFile, page) {
+function getTextFromPage(inputFile: string, page: string): string {
   const tempOutput = 'output.txt'
   execSync(`gs -dBATCH -dNOPAUSE -sDEVICE=txtwrite -sPageList=${page} -sOutputFile=${tempOutput} "${inputFile}"`)
   const textOutput = fs.readFileSync(tempOutput, { encoding: 'utf8' })

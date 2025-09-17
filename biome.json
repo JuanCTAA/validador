@@ -6,6 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
+    "includes": ["**/*.js", "**/*.ts", "**/*.json"],
     "ignoreUnknown": false
   },
   "overrides": [

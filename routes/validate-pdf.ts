@@ -1,11 +1,10 @@
-import express from 'express'
-import multer from 'multer'
-
-const router = new express.Router()
-
+import express, { type Request, type Response, type Router } from 'express'
 import fs from 'fs'
+import multer, { type Multer } from 'multer'
 import { promisify } from 'util'
 import { hasEmptyPagesGhostscript } from '../libs/hasEmptyPagesGhostscript.js'
+
+const router: Router = express.Router()
 
 const unlinkAsync = promisify(fs.unlink)
 
@@ -54,7 +53,7 @@ const upload = multer({
  *             description: An error occured while validating the PDF
  *
  */
-router.post('/validate-pdf', upload.single('pdf'), async (req, res) => {
+router.post('/validate-pdf', upload.single('pdf'), async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No PDF file uploaded' })

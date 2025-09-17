@@ -13,7 +13,7 @@ test('Should throw error if NO file is uploaded', async () => {
 })
 
 // Function to get PDF files from a folder
-function getPdfFilesFromFolder(folderPath) {
+function getPdfFilesFromFolder(folderPath: string): string[] {
   return fs
     .readdirSync(folderPath)
     .filter((file) => path.extname(file).toLowerCase() === '.pdf')
@@ -36,7 +36,7 @@ describe('PDF Validation Tests', () => {
         console.error(`Failed validation for a valid PDF: ${filePath}`)
         throw error // Re-throw the error to keep the test failed status
       }
-    }, 300000) // 5 minutes timeout
+    })
   })
 
   // Test for invalid PDF files
@@ -48,6 +48,6 @@ describe('PDF Validation Tests', () => {
         console.error(`Failed rejection for an invalid PDF: ${filePath}`)
         throw error // Re-throw the error to keep the test failed status
       }
-    }, 300000) // 5 minutes timeout
+    })
   })
 })
