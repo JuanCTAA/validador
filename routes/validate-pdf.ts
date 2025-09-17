@@ -2,7 +2,7 @@ import express, { type Request, type Response, type Router } from 'express'
 import fs from 'fs'
 import multer from 'multer'
 import { promisify } from 'util'
-import { hasEmptyPagesGhostscript } from '../libs/hasEmptyPagesGhostscript.js'
+import { hasEmptyPagesVisual } from '../libs/hasEmptyPagesVisual.js'
 
 const router: Router = express.Router()
 
@@ -66,7 +66,7 @@ router.post('/validate-pdf', upload.single('pdf'), async (req: Request, res: Res
       return
     }
 
-    const isInvalid = await hasEmptyPagesGhostscript(req.file.path)
+    const isInvalid = await hasEmptyPagesVisual(req.file.path)
     console.log(`The pdf is ${isInvalid ? 'invalid' : 'valid'}`)
 
     if (!isInvalid) {
