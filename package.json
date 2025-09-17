@@ -24,6 +24,7 @@
     "perf:history": "cat test/performance/performance-history.json | jq '.summary'",
     "perf:check-regression": "tsx scripts/check-performance-regression.ts",
     "update-readme": "tsx scripts/update-readme.ts",
+    "rename-fixtures": "tsx scripts/rename-fixtures.ts",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "check": "biome check .",
