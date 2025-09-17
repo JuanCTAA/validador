@@ -1,6 +1,6 @@
 import express, { type Request, type Response, type Router } from 'express'
 import fs from 'fs'
-import multer, { type Multer } from 'multer'
+import multer from 'multer'
 import { promisify } from 'util'
 import { hasEmptyPagesGhostscript } from '../libs/hasEmptyPagesGhostscript.js'
 
@@ -10,23 +10,23 @@ const unlinkAsync = promisify(fs.unlink)
 
 // Define storage using multer.diskStorage
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (_req, _file, cb) => {
     const path = './'
     fs.mkdirSync(path, { recursive: true }) // Create the directory if it doesn't exist
     cb(null, path)
   },
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     cb(null, file.originalname)
   },
 })
 const upload = multer({
   storage,
-  fileFilter(req, file, cb) {
+  fileFilter(_req, file, cb) {
     if (!file.originalname.match(/\.(pdf)$/)) {
       return cb(new Error('Please upload a valid PDF file. '))
     }
 
-    cb(undefined, true)
+    cb(null, true)
   },
 })
 
@@ -56,27 +56,32 @@ const upload = multer({
 router.post('/validate-pdf', upload.single('pdf'), async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: 'No PDF file uploaded' })
+      res.status(400).json({ error: 'No PDF file uploaded' })
+      return
     }
     console.log('PDF file uploaded')
 
     if (!req.file.path) {
-      return res.status(400).json({ error: 'No PDF file uploaded' })
+      res.status(400).json({ error: 'No PDF file uploaded' })
+      return
     }
 
     const isInvalid = await hasEmptyPagesGhostscript(req.file.path)
     console.log(`The pdf is ${isInvalid ? 'invalid' : 'valid'}`)
 
     if (!isInvalid) {
-      return res.status(200).json({ message: 'PDF is valid' })
+      res.status(200).json({ message: 'PDF is valid' })
+      return
     } else {
-      return res.status(400).json({ error: `PDF is invalid.` })
+      res.status(400).json({ error: `PDF is invalid.` })
+      return
     }
   } catch (error) {
-    console.error(`An error occured while validating the PDF: ${error.message}`)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error(`An error occured while validating the PDF: ${errorMessage}`)
     res.status(500).json({
       error: 'An error occured while validating the PDF',
-      message: error.message,
+      message: errorMessage,
     })
   } finally {
     if (req.file?.path) {
