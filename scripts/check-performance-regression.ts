@@ -2,29 +2,6 @@
 
 import fs from 'fs'
 
-interface PerformanceResult {
-  timestamp: string
-  testName: string
-  filename: string
-  fileSize: number
-  duration: number
-  isValid: boolean
-  gitCommit?: string
-  nodeVersion: string
-  platform: string
-  arch: string
-}
-
-interface PerformanceSummary {
-  lastRun: string
-  totalTests: number
-}
-
-interface PerformanceHistory {
-  results: PerformanceResult[]
-  summary: PerformanceSummary
-}
-
 const PERFORMANCE_HISTORY_FILE = 'test/performance/performance-history.json'
 
 function checkPerformanceRegression(): void {
@@ -79,6 +56,7 @@ function checkPerformanceRegression(): void {
 
 // Main execution
 import { fileURLToPath } from 'url'
+import type { PerformanceHistory } from '../models/performance-history'
 
 const __filename = fileURLToPath(import.meta.url)
 const isMainModule = process.argv[1] === __filename
