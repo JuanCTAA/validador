@@ -1,6 +1,7 @@
 # PDF Validation API
 
 Author: Ramon Morcillo
+Collaborator: César Alberca ([website](https://cesalberca.com/))
 Company: Matcha Solutions LLC
 
 ## Overview

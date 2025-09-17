@@ -3,6 +3,12 @@
   "private": true,
   "description": "Check via an endpoint if the pdf has an empty page or not",
 	"author": "Ramon Morcillo from Matcha Solutions LLC",
+	"contributors": [
+		{
+			"name": "César Alberca",
+			"url": "https://cesalberca.com/"
+		}
+	],
 	"version": "1.0.0",
 	"main": "app.js",
 	"scripts": {
