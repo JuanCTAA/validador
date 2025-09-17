@@ -1,6 +1,6 @@
-const express = require('express')
-const swaggerUi = require('swagger-ui-express')
-const swaggerJSDoc = require('swagger-jsdoc')
+import express from 'express'
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 
 const router = new express.Router()
 
@@ -19,4 +19,4 @@ const swaggerSpec = swaggerJSDoc(options)
 
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-module.exports = router
+export default router

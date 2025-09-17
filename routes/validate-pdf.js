@@ -1,11 +1,12 @@
-const express = require('express')
-const multer = require('multer')
+import express from 'express'
+import multer from 'multer'
+
 const router = new express.Router()
-const { hasEmptyPagesGhostscript } = require('../libs/hasEmptyPagesGhostscript')
 
-const fs = require('fs')
+import fs from 'fs'
+import { promisify } from 'util'
+import { hasEmptyPagesGhostscript } from '../libs/hasEmptyPagesGhostscript.js'
 
-const { promisify } = require('util')
 const unlinkAsync = promisify(fs.unlink)
 
 // Define storage using multer.diskStorage
@@ -87,4 +88,4 @@ router.post('/validate-pdf', upload.single('pdf'), async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

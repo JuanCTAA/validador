@@ -1,7 +1,6 @@
-const express = require('express')
-
-const validatePdf = require('./routes/validate-pdf')
-const swaggerApi = require('./routes/swagger-ui')
+import express from 'express'
+import swaggerApi from './routes/swagger-ui.js'
+import validatePdf from './routes/validate-pdf.js'
 
 const app = express()
 
@@ -15,4 +14,4 @@ app.listen(port, () => {
   console.log('Server is up on port ' + port)
 })
 
-module.exports = app
+export default app

@@ -1,7 +1,8 @@
-const request = require('supertest')
-const app = require('../app')
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
+import request from 'supertest'
+import { describe, test } from 'vitest'
+import app from '../app.js'
 
 test('Should check if file uploaded is NOT a PDF file', async () => {
   await request(app).post('/validate-pdf').attach('pdf', 'test/fixtures/profile-pic.jpg').expect(500)

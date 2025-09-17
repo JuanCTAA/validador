@@ -1,6 +1,6 @@
-const { defineConfig } = require('vitest/config')
+import { defineConfig } from 'vitest/config'
 
-module.exports = defineConfig({
+export default defineConfig({
   test: {
     environment: 'node',
     testTimeout: 300000, // 5 minutes timeout like the original Jest tests

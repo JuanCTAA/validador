@@ -1,7 +1,7 @@
-const { execSync } = require('child_process')
-const fs = require('fs')
+import { execSync } from 'child_process'
+import fs from 'fs'
 
-exports.hasEmptyPagesGhostscript = async (inputFile) => {
+export const hasEmptyPagesGhostscript = async (inputFile) => {
   try {
     checkGhostscriptInstalled()
     console.log(`Checking for empty pages in ${inputFile}`)
