@@ -83,12 +83,7 @@ Performance tests run automatically:
 
 - **On push** to `main` or `develop` branches
 - **On pull requests** to `main` or `develop` branches
-- **Daily at 2 AM UTC** (scheduled)
 - **Manual triggers** via GitHub Actions UI
-
-### Multi-Version Testing
-
-Tests run on multiple Node.js versions (18.x, 20.x) to ensure performance consistency across versions.
 
 ### Performance Regression Detection
 
