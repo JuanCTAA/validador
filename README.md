@@ -9,28 +9,29 @@ Company: Matcha Solutions LLC
 The PDF Validation API is a Node.js Express API that provides a simple endpoint to check if a PDF document contains an empty page. This can be especially useful when working with PDFs in various applications, ensuring the integrity of your documents.
 
 
+
 ## Performance Results
 
 ### Summary
-- **Total tests run**: 48
-- **Average duration**: 3025.72ms
-- **Fastest test**: Asdasdasd.pdf (68.51ms)
-- **Slowest test**: EJEMPLO 2 CON HOJAS EN BLANCO.pdf (17770.92ms)
+- **Total tests run**: 16
+- **Average duration**: 5300.00ms
+- **Fastest test**: Asdasdasd.pdf (116.22ms)
+- **Slowest test**: EJEMPLO 2 CON HOJAS EN BLANCO.pdf (37034.73ms)
 
 ### Recent Test Results
 
 | File | Size (KB) | Duration (ms) | Performance Change |
 |------|-----------|--------------------|--------------------|
-| LIBRO ORDENES.pdf | 4052.9 | 812.27 | N/A |
-| PROYECTO_BASICO_Y_EJECUCION_CALLE_AGRET6_SUBSA2_signed.pdf | 15997.8 | 2866.85 | N/A |
-| PROYECTO_EJECUTIVO_ANEXOS_2_mxc.pdf | 5753.8 | 1915.27 | N/A |
-| valid.pdf | 67.8 | 80.65 | N/A |
-| Asdasdasd.pdf | 33.7 | 76.63 | N/A |
-| EJEMPLO 1 CON HOJAS EN BLANCO.pdf | 44748.3 | 7488.40 | N/A |
-| EJEMPLO 2 CON HOJAS EN BLANCO.pdf | 61788.4 | 17614.40 | ⚪ 2.8% similar |
-| EJEMPLO 3 CON MAS DE UNA HOJA.pdf | 14974.5 | 2823.04 | ⚪ 4.8% similar |
-| NAVE_JACARILLA_firmado.pdf | 4262.3 | 800.67 | ⚪ 3.8% similar |
-| invalid2.pdf | 12.8 | 108.52 | 🔴 7.1% slower |
+| LIBRO ORDENES.pdf | 4052.9 | 1461.66 | N/A |
+| PROYECTO_BASICO_Y_EJECUCION_CALLE_AGRET6_SUBSA2_signed.pdf | 15997.8 | 4759.28 | N/A |
+| PROYECTO_EJECUTIVO_ANEXOS_2_mxc.pdf | 5753.8 | 2763.88 | N/A |
+| valid.pdf | 67.8 | 122.14 | N/A |
+| Asdasdasd.pdf | 33.7 | 116.22 | N/A |
+| EJEMPLO 1 CON HOJAS EN BLANCO.pdf | 44748.3 | 11625.44 | N/A |
+| EJEMPLO 2 CON HOJAS EN BLANCO.pdf | 61788.4 | 37034.73 | N/A |
+| EJEMPLO 3 CON MAS DE UNA HOJA.pdf | 14974.5 | 4782.90 | N/A |
+| NAVE_JACARILLA_firmado.pdf | 4262.3 | 1328.35 | N/A |
+| invalid2.pdf | 12.8 | 167.79 | N/A |
 
 *Performance results are automatically updated by GitHub Actions after each test run.*
 
