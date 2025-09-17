@@ -13,28 +13,25 @@ The PDF Validation API is a Node.js Express API that provides a simple endpoint 
 
 
 
+
 ## Performance Results
 
 ### Summary
-- **Total tests run**: 128
-- **Average duration**: 6106.35ms
-- **Fastest test**: valid_014_165mbs.pdf (52.22ms)
-- **Slowest test**: valid_003_373mbs.pdf (114880.79ms)
-
+- **Total tests run**: 15
 ### Recent Test Results
 
 | File | Size (KB) | Duration (ms) | Performance Change |
 |------|-----------|--------------------|--------------------|
-| valid_023_6mbs.pdf | 0.1 | 53.95 | N/A |
-| valid_024_0mbs.pdf | 0.1 | 58.64 | N/A |
-| invalid_001_7mbs.pdf | 0.1 | 52.66 | N/A |
-| invalid_002_20mbs.pdf | 0.1 | 53.79 | N/A |
-| invalid_003_0mbs.pdf | 0.1 | 56.92 | N/A |
-| invalid_004_44mbs.pdf | 0.1 | 53.48 | N/A |
-| invalid_005_60mbs.pdf | 0.1 | 57.57 | N/A |
-| invalid_006_15mbs.pdf | 0.1 | 52.93 | N/A |
-| invalid_007_4mbs.pdf | 0.1 | 53.23 | N/A |
-| invalid_008_0mbs.pdf | 0.1 | 60.77 | N/A |
+| valid_006_22mbs.pdf | 0.1 | 54.12 | N/A |
+| valid_007_6mbs.pdf | 0.1 | 54.58 | N/A |
+| invalid_001_7mbs.pdf | 0.1 | 53.36 | N/A |
+| invalid_002_20mbs.pdf | 0.1 | 57.34 | N/A |
+| invalid_003_0mbs.pdf | 0.1 | 54.67 | N/A |
+| invalid_004_44mbs.pdf | 0.1 | 54.47 | N/A |
+| invalid_005_60mbs.pdf | 0.1 | 55.65 | N/A |
+| invalid_006_15mbs.pdf | 0.1 | 53.93 | N/A |
+| invalid_007_4mbs.pdf | 0.1 | 54.57 | N/A |
+| invalid_008_0mbs.pdf | 0.1 | 54.33 | N/A |
 
 *Performance results are automatically updated by GitHub Actions after each test run.*
 
