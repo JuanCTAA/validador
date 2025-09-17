@@ -1,0 +1,6 @@
+# Large PDF test fixtures should be handled with Git LFS
+test/fixtures/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+# Other binary files in test fixtures
+test/fixtures/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+test/fixtures/**/*.png filter=lfs diff=lfs merge=lfs -text
+test/fixtures/**/*.jpeg filter=lfs diff=lfs merge=lfs -text

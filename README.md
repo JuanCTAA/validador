@@ -30,6 +30,35 @@ sudo apt-get update
 sudo apt-get install -y ghostscript
 ```
 
+### Installing Git LFS (Required for Development)
+
+This project uses Git LFS (Large File Storage) to manage large PDF test fixtures. All team members need to install and configure Git LFS:
+
+**macOS (using Homebrew):**
+```bash
+brew install git-lfs
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt install git-lfs
+```
+
+**Windows:**
+Download from: https://git-lfs.github.io/
+
+**Initialize Git LFS:**
+```bash
+git lfs install
+```
+
+**Verify LFS is working:**
+```bash
+git lfs ls-files
+```
+
+This should list all PDF and image files in the test/fixtures directory.
+
 ## How to Use
 
 To use the API, follow these steps:
