@@ -43,6 +43,8 @@ jobs:
         with:
           name: performance-history
           path: test/performance/
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true # Don't fail if no previous history exists
 
       - name: Run performance tests
