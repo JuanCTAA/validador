@@ -11,28 +11,29 @@ The PDF Validation API is a Node.js Express API that provides a simple endpoint 
 
 
 
+
 ## Performance Results
 
 ### Summary
 - **Total tests run**: 64
-- **Average duration**: 3590.57ms
+- **Average duration**: 3610.27ms
 - **Fastest test**: Asdasdasd.pdf (68.51ms)
-- **Slowest test**: EJEMPLO 2 CON HOJAS EN BLANCO.pdf (36906.64ms)
+- **Slowest test**: EJEMPLO 2 CON HOJAS EN BLANCO.pdf (37210.90ms)
 
 ### Recent Test Results
 
 | File | Size (KB) | Duration (ms) | Performance Change |
 |------|-----------|--------------------|--------------------|
-| LIBRO ORDENES.pdf | 4052.9 | 1460.57 | N/A |
-| PROYECTO_BASICO_Y_EJECUCION_CALLE_AGRET6_SUBSA2_signed.pdf | 15997.8 | 4735.46 | N/A |
-| PROYECTO_EJECUTIVO_ANEXOS_2_mxc.pdf | 5753.8 | 2693.09 | N/A |
-| valid.pdf | 67.8 | 120.37 | N/A |
-| Asdasdasd.pdf | 33.7 | 115.92 | N/A |
-| EJEMPLO 1 CON HOJAS EN BLANCO.pdf | 44748.3 | 11653.54 | N/A |
-| EJEMPLO 2 CON HOJAS EN BLANCO.pdf | 61788.4 | 36906.64 | 🔴 109.5% slower |
-| EJEMPLO 3 CON MAS DE UNA HOJA.pdf | 14974.5 | 4794.91 | 🔴 69.8% slower |
-| NAVE_JACARILLA_firmado.pdf | 4262.3 | 1330.43 | 🔴 66.2% slower |
-| invalid2.pdf | 12.8 | 166.34 | 🔴 53.3% slower |
+| LIBRO ORDENES.pdf | 4052.9 | 1472.75 | N/A |
+| PROYECTO_BASICO_Y_EJECUCION_CALLE_AGRET6_SUBSA2_signed.pdf | 15997.8 | 4880.15 | N/A |
+| PROYECTO_EJECUTIVO_ANEXOS_2_mxc.pdf | 5753.8 | 2742.22 | N/A |
+| valid.pdf | 67.8 | 123.69 | N/A |
+| Asdasdasd.pdf | 33.7 | 119.42 | N/A |
+| EJEMPLO 1 CON HOJAS EN BLANCO.pdf | 44748.3 | 11888.02 | N/A |
+| EJEMPLO 2 CON HOJAS EN BLANCO.pdf | 61788.4 | 37210.90 | 🔴 111.3% slower |
+| EJEMPLO 3 CON MAS DE UNA HOJA.pdf | 14974.5 | 4899.83 | 🔴 73.6% slower |
+| NAVE_JACARILLA_firmado.pdf | 4262.3 | 1359.58 | 🔴 69.8% slower |
+| invalid2.pdf | 12.8 | 171.20 | 🔴 57.8% slower |
 
 *Performance results are automatically updated by GitHub Actions after each test run.*
 
