@@ -104,7 +104,7 @@ async function measurePerformance(
 
   const duration = endTime - startTime
 
-  console.log(`✅ Completed in ${duration.toFixed(2)}ms - Result: ${isValid ? 'valid' : 'invalid'}`)
+  console.log(`✅ Completed in ${(duration / 1000).toFixed(2)}s - Result: ${isValid ? 'valid' : 'invalid'}`)
 
   // Verify the result matches expectation
   if (isValid !== expectedValid) {
@@ -170,10 +170,10 @@ describe('PDF Validation Performance Tests', () => {
     console.log(`\n📊 Performance Test Summary:`)
     console.log(`Total tests run: ${performanceResults.length}`)
     console.log(
-      `Average duration: ${(performanceResults.reduce((a, b) => a + b.duration, 0) / performanceResults.length).toFixed(2)}ms`,
+      `Average duration: ${(performanceResults.reduce((a, b) => a + b.duration, 0) / performanceResults.length / 1000).toFixed(2)}s`,
     )
-    console.log(`Fastest test: ${Math.min(...performanceResults.map((r) => r.duration)).toFixed(2)}ms`)
-    console.log(`Slowest test: ${Math.max(...performanceResults.map((r) => r.duration)).toFixed(2)}ms`)
+    console.log(`Fastest test: ${(Math.min(...performanceResults.map((r) => r.duration)) / 1000).toFixed(2)}s`)
+    console.log(`Slowest test: ${(Math.max(...performanceResults.map((r) => r.duration)) / 1000).toFixed(2)}s`)
     console.log(`Results saved to: ${PERFORMANCE_HISTORY_FILE}`)
 
     // Compare with previous runs if available

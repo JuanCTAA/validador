@@ -50,11 +50,11 @@ function updateReadmeWithPerformanceResults(): void {
     table += '### Summary\n'
     table += '- **Total tests run**: ' + summary.totalTests + '\n'
     table += '### Recent Test Results\n\n'
-    table += '| File | Size (KB) | Duration (ms) | Performance Change |\n'
-    table += '|------|-----------|--------------------|--------------------|' + '\n'
+    table += '| File | Duration (s) | Performance Change |\n'
+    table += '|------|--------------|--------------------|\n'
 
     recentResults.forEach((result: PerformanceResult) => {
-      const sizeKB = (result.fileSize / 1024).toFixed(1)
+      const durationSeconds = (result.duration / 1000).toFixed(2)
 
       // Calculate performance change
       let performanceChange = 'N/A'
@@ -70,7 +70,7 @@ function updateReadmeWithPerformanceResults(): void {
         }
       }
 
-      table += `| ${result.filename} | ${sizeKB} | ${result.duration.toFixed(2)} | ${performanceChange} |\n`
+      table += `| ${result.filename} | ${durationSeconds} | ${performanceChange} |\n`
     })
 
     table += '\n*Performance results are automatically updated by GitHub Actions after each test run.*\n'

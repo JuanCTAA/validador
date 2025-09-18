@@ -38,14 +38,6 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Download previous performance history
-        uses: actions/download-artifact@v4
-        with:
-          name: performance-history
-          path: test/performance/
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true # Don't fail if no previous history exists
 
       - name: Run performance tests
         run: npm run test:perf
@@ -72,13 +64,6 @@ jobs:
             echo "No performance history file found" >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: Upload performance history
-        uses: actions/upload-artifact@v4
-        with:
-          name: performance-history
-          path: test/performance/performance-history.json
-          retention-days: 90
-        if: always()
 
       - name: Check for performance regression
         run: npm run perf:check-regression
@@ -86,17 +71,22 @@ jobs:
       - name: Update README with performance table
         run: npm run update-readme
 
-      - name: Commit and push README changes
+      - name: Generate complete performance history
+        run: npm run generate-perf-history
+
+      - name: Commit and push changes
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-          if git diff --quiet README.md; then
-            echo "No changes to README.md"
+          # Check if there are any changes to commit
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to commit"
           else
-            git add README.md
-            git commit -m "Update performance results in README [skip ci]"
+            # Add all performance-related files
+            git add test/performance/performance-history.json README.md docs/PERFORMANCE_EXECUTION_HISTORY.md
+            git commit -m "Update performance results and documentation [skip ci]"
             git push
           fi
 

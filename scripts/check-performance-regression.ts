@@ -40,7 +40,7 @@ function checkPerformanceRegression(): void {
 
     if (changePercent > regressionThreshold) {
       console.error(`❌ Performance regression detected: ${changePercent.toFixed(2)}% slower`)
-      console.error(`Current: ${currentAvg.toFixed(2)}ms, Previous: ${previousAvg.toFixed(2)}ms`)
+      console.error(`Current: ${(currentAvg / 1000).toFixed(2)}s, Previous: ${(previousAvg / 1000).toFixed(2)}s`)
       process.exit(1)
     } else if (changePercent < -5) {
       console.log(`🎉 Performance improvement: ${Math.abs(changePercent).toFixed(2)}% faster`)
