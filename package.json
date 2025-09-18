@@ -20,8 +20,8 @@
     "dev": "ts-node --esm app.ts",
     "dev:watch": "nodemon --exec ts-node --esm app.ts",
     "test": "vitest run",
-    "test:unit": "vitest run",
-    "test:perf": "VITEST_PROJECT=performance vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:perf": "vitest run --project performance",
     "perf:history": "cat test/performance/performance-history.json | jq '.summary'",
     "perf:check-regression": "tsx scripts/check-performance-regression.ts",
     "update-readme": "tsx scripts/update-readme.ts",
@@ -37,6 +37,7 @@
     "multer": "2.0.2",
     "nodemon": "3.1.10",
     "pdf-parse": "1.1.1",
+    "pdfjs-dist": "5.4.149",
     "swagger-jsdoc": "6.2.8",
     "swagger-ui-express": "5.0.1"
   },

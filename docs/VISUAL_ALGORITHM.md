@@ -127,7 +127,7 @@ libs/
 ├── hasEmptyPagesGhostscript.ts  // Original algorithm
 ├── hasEmptyPagesVisual.ts       // New visual algorithm
 test/performance/
-├── validate-pdf.perf.ts         // Original performance tests
+├── validate-pdf.perf.test.ts         // Original performance tests
 ├── validate-pdf-visual.perf.ts  // Algorithm comparison tests
 └── algorithm-comparison.json    // Comparison results
 ```
