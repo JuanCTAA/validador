@@ -17,15 +17,11 @@ The original Ghostscript-based algorithm, while accurate, suffers from performan
 
 ### Architecture
 
-The visual algorithm uses a hybrid approach combining fast text analysis with selective visual verification:
+The visual algorithm uses a pure visual approach for maximum accuracy:
 
 ```
 PDF Input
     ↓
-Text-based Analysis (pdf-parse)
-    ↓
-Blank pages suspected? → No → Return: Valid
-    ↓ Yes
 Visual Analysis (Playwright)
     ↓
 Final Result
@@ -33,31 +29,25 @@ Final Result
 
 ### Key Components
 
-#### 1. Text-based Analysis (`pdf-parse`)
-- **Fast extraction**: Leverages the existing pdf-parse library
-- **Heuristic analysis**: Uses text density and distribution metrics
-- **Thresholds**:
-  - Average characters per page < 50: Likely blank pages
-  - Average lines per page < 2: Likely blank pages
-
-#### 2. Visual Analysis (`Playwright`)
-- **Browser rendering**: Uses Chromium to render PDFs
+#### Visual Analysis (`Playwright`)
+- **Browser rendering**: Uses Chromium to render PDFs natively
 - **Screenshot analysis**: Captures page images for blank detection
 - **Image analysis**: Analyzes screenshot file sizes and pixel data
-- **Sampling strategy**: Tests first 5 pages for performance
-- **Threshold**: >20% blank pages indicates problematic PDF
+- **Dynamic page navigation**: Uses keyboard navigation to check multiple pages
+- **Sampling strategy**: Tests up to 10 pages for performance
+- **Threshold**: >30% blank pages indicates problematic PDF
 
 ### Performance Characteristics
 
 #### Speed Improvements
-- **Text analysis**: ~100-500ms for most PDFs
-- **Visual verification**: Only when needed, ~2-5s for sampling
+- **Direct visual analysis**: ~2-10s for most PDFs
+- **No text preprocessing**: Eliminates false positives from text analysis
 - **Total time**: Typically under 30s for 300MB files
 
 #### Accuracy
-- **Text detection**: Excellent for text-based content
-- **Visual verification**: Catches image-only pages and complex layouts
-- **False positive reduction**: Two-stage approach minimizes incorrect flagging
+- **Pure visual detection**: Eliminates false positives from text-based analysis
+- **Browser-native rendering**: Accurate representation of PDF content
+- **Sampling approach**: Efficient analysis of large documents
 
 ## API Integration
 
@@ -126,8 +116,7 @@ Based on initial testing:
 
 ```json
 {
-  "pdf-parse": "1.1.1",    // Text extraction
-  "playwright": "^1.40.0"  // Visual analysis
+  "playwright": "^1.55.0"
 }
 ```
 
@@ -195,16 +184,11 @@ const BLANK_PAGE_SIZE_THRESHOLD = 10000 // screenshot size in bytes
 ```typescript
 // Before (Ghostscript only)
 import { hasEmptyPagesGhostscript } from './libs/hasEmptyPagesGhostscript.js'
-const isInvalid = await hasEmptyPagesGhostscript(filePath)
+const isInvalidGS = await hasEmptyPagesGhostscript(filePath)
 
-// After (with algorithm choice)
-import { hasEmptyPagesGhostscript } from './libs/hasEmptyPagesGhostscript.js'
+// After (Pure Visual approach)
 import { hasEmptyPagesVisual } from './libs/hasEmptyPagesVisual.js'
-
-const algorithm = 'visual' // or 'ghostscript'
-const isInvalid = algorithm === 'visual' 
-  ? await hasEmptyPagesVisual(filePath)
-  : await hasEmptyPagesGhostscript(filePath)
+const isInvalidVisual = await hasEmptyPagesVisual(filePath)
 ```
 
 ### API Client Updates

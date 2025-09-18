@@ -1,34 +1,13 @@
 import fs from 'fs'
-import pdf from 'pdf-parse'
 import { chromium } from 'playwright'
 
 export const hasEmptyPagesVisual = async (inputFile: string): Promise<boolean> => {
   try {
-    console.log(`Checking for empty pages in ${inputFile} using visual/text analysis`)
+    console.log(`Checking for empty pages in ${inputFile} using visual analysis only`)
 
-    const dataBuffer = fs.readFileSync(inputFile)
-    const data = await pdf(dataBuffer)
-
-    console.log(`PDF has ${data.numpages} pages`)
-    console.log(`Total text length: ${data.text.length} characters`)
-
-    // If the entire PDF has very little text, it might have blank pages
-    if (data.text.trim().length === 0) {
-      console.log('PDF has no extractable text - likely all pages are blank')
-      return true
-    }
-
-    // First try text-based analysis for speed
-    const textBasedResult = await checkPagesIndividually(dataBuffer, data.numpages)
-
-    // If text analysis suggests blank pages, verify with visual analysis
-    if (textBasedResult) {
-      console.log('Text analysis suggests blank pages - verifying with visual analysis...')
-      const visualResult = await checkPagesVisually(inputFile, data.numpages)
-      return visualResult
-    }
-
-    return false
+    // Use only visual analysis - no text parsing to avoid false positives
+    const visualResult = await checkPagesVisually(inputFile)
+    return visualResult
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     console.error(`Error checking for empty pages: ${errorMessage}`)
@@ -36,44 +15,7 @@ export const hasEmptyPagesVisual = async (inputFile: string): Promise<boolean> =
   }
 }
 
-async function checkPagesIndividually(dataBuffer: Buffer, numPages: number): Promise<boolean> {
-  console.log('Checking individual pages for content...')
-
-  // This is a simplified approach - pdf-parse doesn't easily allow per-page text extraction
-  // We'll use a heuristic based on average text per page
-  const data = await pdf(dataBuffer)
-  const totalText = data.text.trim()
-  const averageTextPerPage = totalText.length / numPages
-
-  console.log(`Average text per page: ${averageTextPerPage.toFixed(2)} characters`)
-
-  // If average text per page is very low, there are likely blank pages
-  // This threshold can be adjusted based on testing
-  const BLANK_PAGE_THRESHOLD = 50 // characters per page on average
-
-  if (averageTextPerPage < BLANK_PAGE_THRESHOLD) {
-    console.log(`Low text density detected - likely contains blank pages`)
-    return true
-  }
-
-  // Additional check: if the text is heavily concentrated in few pages,
-  // other pages might be blank
-  const lines = totalText.split('\n').filter((line) => line.trim().length > 0)
-  const linesPerPage = lines.length / numPages
-
-  console.log(`Average lines per page: ${linesPerPage.toFixed(2)}`)
-
-  if (linesPerPage < 2) {
-    // Less than 2 lines per page on average
-    console.log(`Low line density detected - likely contains blank pages`)
-    return true
-  }
-
-  console.log('No blank pages detected based on text analysis')
-  return false
-}
-
-async function checkPagesVisually(inputFile: string, numPages: number): Promise<boolean> {
+async function checkPagesVisually(inputFile: string): Promise<boolean> {
   console.log('Starting visual analysis with Playwright...')
 
   const browser = await chromium.launch({ headless: true })
@@ -85,38 +27,53 @@ async function checkPagesVisually(inputFile: string, numPages: number): Promise<
     const pdfBuffer = fs.readFileSync(inputFile)
     const pdfDataUrl = `data:application/pdf;base64,${pdfBuffer.toString('base64')}`
 
-    await page.goto(pdfDataUrl, { waitUntil: 'networkidle' })
+    await page.goto(pdfDataUrl, { waitUntil: 'domcontentloaded' })
 
-    // Wait for PDF to load
-    await page.waitForTimeout(2000)
+    // Reduced wait time for PDF to load - most PDFs load quickly
+    await page.waitForTimeout(1000)
 
-    // Check each page for visual content
-    let blankPagesFound = 0
-    const SAMPLE_PAGES = Math.min(5, numPages) // Sample first 5 pages for performance
+    // Check pages for visual content with early exit optimization
+    // Check all pages in the PDF until we find a blank page or reach the end
 
-    for (let pageNum = 1; pageNum <= SAMPLE_PAGES; pageNum++) {
+    let pageNum = 1
+    while (true) {
       console.log(`Analyzing page ${pageNum} visually...`)
 
-      // Take screenshot of the page
-      const screenshot = await page.screenshot({
-        fullPage: true,
-        type: 'png',
-      })
+      try {
+        // Navigate to specific page if possible
+        // Most PDF viewers support page navigation via keyboard shortcuts
+        if (pageNum > 1) {
+          await page.keyboard.press('PageDown')
+          await page.waitForTimeout(200) // Reduced wait time for page navigation
+        }
 
-      // Analyze the screenshot for blank content
-      const isBlank = await analyzeImageForBlankness(screenshot)
+        // Take screenshot of the current page
+        const screenshot = await page.screenshot({
+          fullPage: true,
+          type: 'png',
+        })
 
-      if (isBlank) {
-        blankPagesFound++
-        console.log(`Page ${pageNum} appears to be blank`)
+        // Analyze the screenshot for blank content
+        const isBlank = await analyzeImageForBlankness(screenshot)
+
+        if (isBlank) {
+          console.log(`Page ${pageNum} appears to be blank - early exit`)
+          return true // Early exit as soon as we find one blank page
+        }
+
+        // Try to go to next page, if we can't, we've reached the end
+        await page.keyboard.press('PageDown')
+        await page.waitForTimeout(100) // Minimal wait for navigation
+
+        pageNum++
+      } catch (error) {
+        console.log(`Could not analyze page ${pageNum}, stopping analysis`)
+        break
       }
     }
 
-    console.log(`Found ${blankPagesFound} blank pages out of ${SAMPLE_PAGES} sampled pages`)
-
-    // If more than 20% of sampled pages are blank, consider the PDF as having blank pages
-    const blankRatio = blankPagesFound / SAMPLE_PAGES
-    return blankRatio > 0.2
+    console.log(`No blank pages found in the checked pages`)
+    return false // No blank pages found
   } finally {
     await browser.close()
   }
