@@ -3,7 +3,7 @@ import fs from 'fs'
 import multer from 'multer'
 import { performance } from 'perf_hooks'
 import { promisify } from 'util'
-import { hasEmptyPagesVisual } from '../libs/hasEmptyPagesVisual.js'
+import { hasEmptyPagesGhostscript } from '../libs/hasEmptyPagesGhostscript'
 
 const router: Router = express.Router()
 
@@ -110,7 +110,7 @@ router.post('/validate-pdf', upload.single('pdf'), async (req: Request, res: Res
       return
     }
 
-    const isInvalid = await hasEmptyPagesVisual(req.file.path)
+    const isInvalid = await hasEmptyPagesGhostscript(req.file.path)
     const processingTime = performance.now() - startTime
     console.log(`The pdf is ${isInvalid ? 'invalid' : 'valid'} (processed in ${Math.round(processingTime)} ms)`)
 
