@@ -2,13 +2,13 @@
 
 This document contains the complete execution history of PDF validation performance tests, organized by file.
 
-**Last Updated:** 2025-09-18T17:30:59.006Z
-**Total Test Runs:** 105
+**Last Updated:** 2025-09-19T09:49:58.918Z
+**Total Test Runs:** 120
 **Files Tested:** 15
 
 ## Overall Statistics
 
-- **Average Duration:** 3.89s
+- **Average Duration:** 3.41s
 - **Fastest Test:** 0.05s
 - **Slowest Test:** 81.35s
 
@@ -33,8 +33,8 @@ This document contains the complete execution history of PDF validation performa
 ## invalid_001_7mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 0.65s
+**Test Runs:** 8
+**Average Duration:** 0.57s
 **Best Time:** 0.05s
 **Worst Time:** 2.17s
 
@@ -44,6 +44,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:40 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -62,6 +63,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.05s
 ```
 
 ---
@@ -69,8 +71,8 @@ This document contains the complete execution history of PDF validation performa
 ## invalid_002_20mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 1.00s
+**Test Runs:** 8
+**Average Duration:** 0.88s
 **Best Time:** 0.05s
 **Worst Time:** 3.41s
 
@@ -80,6 +82,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:40 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -98,6 +101,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.06s
 ```
 
 ---
@@ -105,17 +109,18 @@ This document contains the complete execution history of PDF validation performa
 ## invalid_003_0mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
+**Test Runs:** 8
 **Average Duration:** 0.06s
 **Best Time:** 0.05s
 **Worst Time:** 0.08s
 
-**Latest Trend:** 📈 16.9% slower
+**Latest Trend:** 📊 stable
 
 ### Execution History
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:40 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -134,6 +139,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: ███ 0.05s
 2025-09-18: ██ 0.05s
 2025-09-18: ████████████ 0.06s
+2025-09-19: ███████████ 0.06s
 ```
 
 ---
@@ -141,8 +147,8 @@ This document contains the complete execution history of PDF validation performa
 ## invalid_004_44mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 2.09s
+**Test Runs:** 8
+**Average Duration:** 1.83s
 **Best Time:** 0.05s
 **Worst Time:** 7.24s
 
@@ -152,6 +158,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:40 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -170,6 +177,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.06s
 ```
 
 ---
@@ -177,8 +185,8 @@ This document contains the complete execution history of PDF validation performa
 ## invalid_005_60mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 5.03s
+**Test Runs:** 8
+**Average Duration:** 4.41s
 **Best Time:** 0.05s
 **Worst Time:** 17.53s
 
@@ -188,6 +196,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:40 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.06 | ✅ Valid | v22.19.0 | linux |
@@ -206,6 +215,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.06s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.06s
 ```
 
 ---
@@ -213,8 +223,8 @@ This document contains the complete execution history of PDF validation performa
 ## invalid_006_15mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 0.85s
+**Test Runs:** 8
+**Average Duration:** 0.75s
 **Best Time:** 0.05s
 **Worst Time:** 2.85s
 
@@ -224,6 +234,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:40 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -242,6 +253,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.06s
 ```
 
 ---
@@ -249,8 +261,8 @@ This document contains the complete execution history of PDF validation performa
 ## invalid_007_4mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 0.28s
+**Test Runs:** 8
+**Average Duration:** 0.25s
 **Best Time:** 0.05s
 **Worst Time:** 0.86s
 
@@ -260,6 +272,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:40 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -278,6 +291,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.05s
 ```
 
 ---
@@ -285,7 +299,7 @@ This document contains the complete execution history of PDF validation performa
 ## invalid_008_0mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
+**Test Runs:** 8
 **Average Duration:** 0.07s
 **Best Time:** 0.05s
 **Worst Time:** 0.11s
@@ -296,6 +310,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:40 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -314,6 +329,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: ███ 0.05s
 2025-09-18: ██ 0.05s
+2025-09-19: ██ 0.05s
 ```
 
 ---
@@ -321,17 +337,18 @@ This document contains the complete execution history of PDF validation performa
 ## valid_001_216mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 9.02s
+**Test Runs:** 8
+**Average Duration:** 7.90s
 **Best Time:** 0.05s
 **Worst Time:** 31.58s
 
-**Latest Trend:** 📈 13.5% slower
+**Latest Trend:** 📊 stable
 
 ### Execution History
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:56 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:56 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:38 | 0.06 | ✅ Valid | v22.19.0 | linux |
@@ -350,6 +367,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.06s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.06s
+2025-09-19: █ 0.06s
 ```
 
 ---
@@ -357,8 +375,8 @@ This document contains the complete execution history of PDF validation performa
 ## valid_002_340mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 23.15s
+**Test Runs:** 8
+**Average Duration:** 20.27s
 **Best Time:** 0.05s
 **Worst Time:** 81.35s
 
@@ -368,6 +386,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:56 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:56 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:38 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -386,6 +405,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.05s
 ```
 
 ---
@@ -393,17 +413,18 @@ This document contains the complete execution history of PDF validation performa
 ## valid_003_172mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 9.71s
+**Test Runs:** 8
+**Average Duration:** 8.50s
 **Best Time:** 0.05s
 **Worst Time:** 34.01s
 
-**Latest Trend:** 📊 stable
+**Latest Trend:** 📈 22.0% slower
 
 ### Execution History
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:56 | 0.07 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:56 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:38 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -422,6 +443,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.07s
 ```
 
 ---
@@ -429,8 +451,8 @@ This document contains the complete execution history of PDF validation performa
 ## valid_004_9mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 2.31s
+**Test Runs:** 8
+**Average Duration:** 2.02s
 **Best Time:** 0.05s
 **Worst Time:** 8.02s
 
@@ -440,6 +462,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:56 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:38 | 0.06 | ✅ Valid | v22.19.0 | linux |
@@ -458,6 +481,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.06s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.06s
+2025-09-19: █ 0.05s
 ```
 
 ---
@@ -465,17 +489,18 @@ This document contains the complete execution history of PDF validation performa
 ## valid_005_47mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 0.55s
+**Test Runs:** 8
+**Average Duration:** 0.48s
 **Best Time:** 0.05s
 **Worst Time:** 1.78s
 
-**Latest Trend:** 📈 15.0% slower
+**Latest Trend:** 📊 stable
 
 ### Execution History
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.06 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:38 | 0.06 | ✅ Valid | v22.19.0 | linux |
@@ -494,6 +519,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.06s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.06s
+2025-09-19: █ 0.05s
 ```
 
 ---
@@ -501,8 +527,8 @@ This document contains the complete execution history of PDF validation performa
 ## valid_006_22mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 2.98s
+**Test Runs:** 8
+**Average Duration:** 2.62s
 **Best Time:** 0.05s
 **Worst Time:** 10.34s
 
@@ -512,6 +538,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -530,6 +557,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.05s
 ```
 
 ---
@@ -537,8 +565,8 @@ This document contains the complete execution history of PDF validation performa
 ## valid_007_6mbs.pdf
 
 **File Size:** 0.0 MB
-**Test Runs:** 7
-**Average Duration:** 0.57s
+**Test Runs:** 8
+**Average Duration:** 0.51s
 **Best Time:** 0.05s
 **Worst Time:** 1.88s
 
@@ -548,6 +576,7 @@ This document contains the complete execution history of PDF validation performa
 
 | Date | Time | Duration (s) | Result | Node Version | Platform |
 |------|------|--------------|--------|--------------|---------|
+| 2025-09-19 | 09:49:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 17:30:57 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
 | 2025-09-18 | 16:53:39 | 0.05 | ✅ Valid | v22.19.0 | linux |
@@ -566,6 +595,7 @@ This document contains the complete execution history of PDF validation performa
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
 2025-09-18: █ 0.05s
+2025-09-19: █ 0.05s
 ```
 
 ---
@@ -577,4 +607,4 @@ This document contains the complete execution history of PDF validation performa
 - Performance trends compare the latest run with the previous run
 - This document is automatically generated from performance test data
 
-*Generated on 2025-09-18T17:30:59.007Z from 105 test results*
+*Generated on 2025-09-19T09:49:58.919Z from 120 test results*
