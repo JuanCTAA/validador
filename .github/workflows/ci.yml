@@ -1,14 +1,10 @@
-name: Performance Tests
+name: Tests
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
-permissions:
-  contents: write
-  pull-requests: write
 
 jobs:
   ci:
@@ -36,5 +32,5 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Run performance tests
+      - name: Run Tests
         run: npm run test
