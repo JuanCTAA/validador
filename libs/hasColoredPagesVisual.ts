@@ -8,9 +8,10 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
 
   try {
     // Create temporary directory
+    await cleanupTmpDir(tmpDir)
     await fs.mkdir(tmpDir, { recursive: true })
 
-    const document = await pdf(inputFile, { scale: 1 })
+    const document = await pdf(inputFile, { scale: 0.25 })
     let pageCounter = 1
     let hasColoredContent = false
 

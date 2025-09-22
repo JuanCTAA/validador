@@ -15,8 +15,8 @@
   "scripts": {
     "build": "tsc",
     "compile": "tsc --noEmit",
-    "start": "node dist/app.js",
-    "dev": "ts-node app.ts",
+    "start": "node ./dist/app.js",
+    "dev": "tsx app.ts",
     "test": "vitest run",
     "test:unit": "vitest run --project unit",
     "test:perf": "vitest run --project performance",

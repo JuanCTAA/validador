@@ -7,7 +7,6 @@ const app: Application = express()
 const port: string | number = process.env.PORT ?? 3000
 
 app.use(swaggerApi)
-
 app.use(validatePdf)
 
 app.listen(port, () => {

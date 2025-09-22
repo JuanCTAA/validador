@@ -9,6 +9,38 @@ const router: Router = express.Router()
 
 const unlinkAsync = promisify(fs.unlink)
 
+const calculateProcessingTime = (startTime: number): number => {
+  return Math.round((performance.now() - startTime) * 100) / 100
+}
+
+const sendErrorResponse = (
+  res: Response,
+  statusCode: number,
+  error: string,
+  processingTimeMs: number,
+  message?: string,
+): void => {
+  const responseBody: any = { error, processingTimeMs }
+  if (message) {
+    responseBody.message = message
+  }
+  res.status(statusCode).json(responseBody)
+}
+
+const sendSuccessResponse = (res: Response, message: string, processingTimeMs: number): void => {
+  res.status(200).json({ message, processingTimeMs })
+}
+
+const validateUploadedFile = (file: Express.Multer.File | undefined): string | null => {
+  if (!file) {
+    return 'No PDF file uploaded'
+  }
+  if (!file.path) {
+    return 'No PDF file uploaded'
+  }
+  return null
+}
+
 // Define storage using multer.diskStorage
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -91,51 +123,32 @@ router.post('/validate-pdf', upload.single('pdf'), async (req: Request, res: Res
   const startTime = performance.now()
 
   try {
-    if (!req.file) {
-      const processingTime = performance.now() - startTime
-      res.status(400).json({
-        error: 'No PDF file uploaded',
-        processingTimeMs: Math.round(processingTime * 100) / 100,
-      })
+    // Validate uploaded file
+    const validationError = validateUploadedFile(req.file)
+    if (validationError) {
+      const processingTime = calculateProcessingTime(startTime)
+      sendErrorResponse(res, 400, validationError, processingTime)
       return
     }
+
     console.log('PDF file uploaded')
 
-    if (!req.file.path) {
-      const processingTime = performance.now() - startTime
-      res.status(400).json({
-        error: 'No PDF file uploaded',
-        processingTimeMs: Math.round(processingTime * 100) / 100,
-      })
-      return
-    }
-
-    const isInvalid = await hasColoredPagesVisual(req.file.path)
-    const processingTime = performance.now() - startTime
+    // Process the PDF
+    const isInvalid = await hasColoredPagesVisual(req.file!.path)
+    const processingTime = calculateProcessingTime(startTime)
     console.log(`The pdf is ${isInvalid ? 'invalid' : 'valid'} (processed in ${Math.round(processingTime)} ms)`)
 
+    // Send appropriate response
     if (!isInvalid) {
-      res.status(200).json({
-        message: 'PDF is valid',
-        processingTimeMs: Math.round(processingTime * 100) / 100,
-      })
-      return
+      sendSuccessResponse(res, 'PDF is valid', processingTime)
     } else {
-      res.status(400).json({
-        error: `PDF is invalid.`,
-        processingTimeMs: Math.round(processingTime * 100) / 100,
-      })
-      return
+      sendErrorResponse(res, 400, 'PDF is invalid.', processingTime)
     }
   } catch (error) {
-    const processingTime = performance.now() - startTime
+    const processingTime = calculateProcessingTime(startTime)
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     console.error(`An error occured while validating the PDF: ${errorMessage}`)
-    res.status(500).json({
-      error: 'An error occured while validating the PDF',
-      message: errorMessage,
-      processingTimeMs: Math.round(processingTime * 100) / 100,
-    })
+    sendErrorResponse(res, 500, 'An error occured while validating the PDF', processingTime, errorMessage)
   } finally {
     if (req.file?.path) {
       console.log('Deleting the file')

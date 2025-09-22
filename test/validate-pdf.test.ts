@@ -26,11 +26,14 @@ const testFiles = {
   invalids: getPdfFilesFromFolder('test/fixtures/invalids'),
 }
 
-describe('single PDF test', () => {
-  test('', async () => {
+test('single PDF test', async () => {
+  try {
     const file = fs.readFileSync('test/fixtures/valids/valid_006_22mbs.pdf')
     await request(app).post('/validate-pdf').attach('pdf', file).expect(200) // Expecting success status code
-  })
+  } catch (error) {
+    console.error('Error:', error)
+    throw error
+  }
 })
 
 describe('PDF Validation Tests', () => {
