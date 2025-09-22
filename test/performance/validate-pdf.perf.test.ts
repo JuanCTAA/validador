@@ -140,20 +140,22 @@ describe('PDF Validation Performance Tests', () => {
   const performanceResults: PerformanceResult[] = []
 
   // Test valid PDFs
-  validPdfs.forEach((filePath) => {
-    test(`Performance: Valid PDF - ${path.basename(filePath)}`, async () => {
-      const result = await measurePerformance('Valid PDF Test', filePath, true)
+  test.each(validPdfs.map((filePath) => ({ filePath, testType: 'Valid PDF Test', expected: true })))(
+    'Performance: Valid PDF - $filePath',
+    async ({ filePath, testType, expected }) => {
+      const result = await measurePerformance(testType, filePath, expected)
       performanceResults.push(result)
-    })
-  })
+    },
+  )
 
   // Test invalid PDFs
-  invalidPdfs.forEach((filePath) => {
-    test(`Performance: Invalid PDF - ${path.basename(filePath)}`, async () => {
-      const result = await measurePerformance('Invalid PDF Test', filePath, false)
+  test.each(invalidPdfs.map((filePath) => ({ filePath, testType: 'Invalid PDF Test', expected: false })))(
+    'Performance: Invalid PDF - $filePath',
+    async ({ filePath, testType, expected }) => {
+      const result = await measurePerformance(testType, filePath, expected)
       performanceResults.push(result)
-    })
-  })
+    },
+  )
 
   // Save results after all tests
   test('Save performance results', async () => {

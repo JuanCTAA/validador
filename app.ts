@@ -1,6 +1,6 @@
 import express, { type Application } from 'express'
-import swaggerApi from './routes/swagger-ui.js'
-import validatePdf from './routes/validate-pdf.js'
+import swaggerApi from './routes/swagger-ui'
+import validatePdf from './routes/validate-pdf'
 
 const app: Application = express()
 

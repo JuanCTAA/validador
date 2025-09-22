@@ -26,28 +26,35 @@ const testFiles = {
   invalids: getPdfFilesFromFolder('test/fixtures/invalids'),
 }
 
+describe('single PDF test', () => {
+  test('', async () => {
+    const file = fs.readFileSync('test/fixtures/valids/valid_006_22mbs.pdf')
+    await request(app).post('/validate-pdf').attach('pdf', file).expect(200) // Expecting success status code
+  })
+})
+
 describe('PDF Validation Tests', () => {
-  // Test for valid PDF files
-  testFiles.valids.forEach((filePath) => {
-    test(`Should successfully validate a valid PDF: ${filePath}`, async () => {
+  test.each(testFiles.valids.map((filePath) => ({ filePath, expectedStatus: 200 })))(
+    'Should successfully validate a valid PDF: $filePath',
+    async ({ filePath, expectedStatus }) => {
       try {
-        await request(app).post('/validate-pdf').attach('pdf', filePath).expect(200) // Expecting success status code
+        await request(app).post('/validate-pdf').attach('pdf', filePath).expect(expectedStatus) // Expecting success status code
       } catch (error) {
         console.error(`Failed validation for a valid PDF: ${filePath}`)
         throw error // Re-throw the error to keep the test failed status
       }
-    })
-  })
+    },
+  )
 
-  // Test for invalid PDF files
-  testFiles.invalids.forEach((filePath) => {
-    test(`Should reject an invalid PDF: ${filePath}`, async () => {
+  test.each(testFiles.invalids.map((filePath) => ({ filePath, expectedStatus: 400 })))(
+    'Should reject an invalid PDF: $filePath',
+    async ({ filePath, expectedStatus }) => {
       try {
-        await request(app).post('/validate-pdf').attach('pdf', filePath).expect(400) // Expecting error status code
+        await request(app).post('/validate-pdf').attach('pdf', filePath).expect(expectedStatus) // Expecting error status code
       } catch (error) {
         console.error(`Failed rejection for an invalid PDF: ${filePath}`)
         throw error // Re-throw the error to keep the test failed status
       }
-    })
-  })
+    },
+  )
 })

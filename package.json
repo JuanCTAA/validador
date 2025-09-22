@@ -16,9 +16,7 @@
     "build": "tsc",
     "compile": "tsc --noEmit",
     "start": "node dist/app.js",
-    "start:ts": "ts-node --esm app.ts",
-    "dev": "ts-node --esm app.ts",
-    "dev:watch": "nodemon --exec ts-node --esm app.ts",
+    "dev": "ts-node app.ts",
     "test": "vitest run",
     "test:unit": "vitest run --project unit",
     "test:perf": "vitest run --project performance",
@@ -39,6 +37,7 @@
     "pdf-parse": "1.1.1",
     "pdf-to-img": "5.0.0",
     "pdfjs-dist": "5.4.149",
+    "sharp": "0.34.4",
     "swagger-jsdoc": "6.2.8",
     "swagger-ui-express": "5.0.1"
   },

@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { pdf } from 'pdf-to-img'
+import sharp from 'sharp'
 
 export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean> => {
   const tmpDir = path.join(process.cwd(), 'tmp-pdf-images')
@@ -19,9 +20,10 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
       await fs.writeFile(imagePath, imageBuffer)
 
       // Check if this page has colored pixels
-      const pageHasColor = await hasColoredPixels(imageBuffer)
+      const pageHasColor = await isImageFullyWhite(imagePath)
       if (pageHasColor) {
         hasColoredContent = true
+        console.log(`Page ${pageCounter} has no colored pixels`)
         break // Early exit when we find colored content
       }
 
@@ -42,38 +44,24 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
   }
 }
 
-async function hasColoredPixels(imageBuffer: Buffer): Promise<boolean> {
-  // Simple check for colored pixels by analyzing the image data
-  // This is a basic implementation - in a production environment,
-  // you might want to use a more sophisticated image processing library
+export async function isImageFullyWhite(filePath: string): Promise<boolean> {
+  const { data, info } = await sharp(filePath).resize(50, 50).raw().ensureAlpha().toBuffer({ resolveWithObject: true })
 
-  // For JPEG images, we'll do a simple sampling approach
-  // Check if there are significant variations in RGB values that indicate color
+  const channels = info.channels // usually 4 (RGBA)
+  const length = data.length
 
-  const sampleSize = Math.min(1000, Math.floor(imageBuffer.length / 10))
-  const step = Math.max(3, Math.floor(imageBuffer.length / sampleSize))
+  for (let i = 0; i < length; i += channels) {
+    const r = data[i]
+    const g = data[i + 1]
+    const b = data[i + 2]
+    const a = channels === 4 ? data[i + 3] : 255
 
-  for (let i = 0; i < imageBuffer.length - 2; i += step) {
-    // Ensure we don't go beyond buffer bounds
-    if (i + 2 >= imageBuffer.length) break
-
-    const r = imageBuffer[i] || 0
-    const g = imageBuffer[i + 1] || 0
-    const b = imageBuffer[i + 2] || 0
-
-    // Check if RGB values are significantly different (indicating color)
-    // Allow some tolerance for compression artifacts
-    const tolerance = 30
-    const maxDiff = Math.max(Math.abs(r - g), Math.abs(g - b), Math.abs(r - b))
-
-    if (maxDiff > tolerance) {
-      return true // Found colored content
+    if (!(r === 255 && g === 255 && b === 255 && a === 255)) {
+      return false
     }
   }
-
-  return false // No significant color variation found
+  return true
 }
-
 async function cleanupTmpDir(tmpDir: string): Promise<void> {
   try {
     const files = await fs.readdir(tmpDir)
