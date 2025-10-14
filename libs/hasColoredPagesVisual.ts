@@ -7,6 +7,12 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
   const startTime = performance.now()
   console.log(`[PERF] Starting hasColoredPagesVisual for file: ${inputFile}`)
 
+  // Log initial memory usage
+  const initialMemory = process.memoryUsage()
+  console.log(
+    `[PERF] Initial memory usage: ${Math.round(initialMemory.heapUsed / 1024 / 1024)}MB heap, ${Math.round(initialMemory.rss / 1024 / 1024)}MB RSS`,
+  )
+
   const tmpDir = path.join(process.cwd(), 'tmp-pdf-images')
   const pageTimings: number[] = []
 
@@ -18,11 +24,28 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
     const cleanupTime = performance.now() - cleanupStartTime
     console.log(`[PERF] Directory setup completed in ${cleanupTime.toFixed(2)}ms`)
 
-    // Load PDF document
+    // Load PDF document with lower scale for memory efficiency
     const pdfLoadStartTime = performance.now()
-    const document = await pdf(inputFile, { scale: 0.25 })
+
+    // Get file size to determine appropriate scale
+    const fileStats = await fs.stat(inputFile)
+    const fileSizeMB = fileStats.size / (1024 * 1024)
+
+    // Use lower scale for larger files to reduce memory usage
+    let scale = 0.25
+    if (fileSizeMB > 50) {
+      scale = 0.15 // Very large files
+      console.log(`[PERF] Large file detected (${fileSizeMB.toFixed(1)}MB), using reduced scale: ${scale}`)
+    } else if (fileSizeMB > 20) {
+      scale = 0.2 // Large files
+      console.log(`[PERF] Medium-large file detected (${fileSizeMB.toFixed(1)}MB), using reduced scale: ${scale}`)
+    }
+
+    const document = await pdf(inputFile, { scale })
     const pdfLoadTime = performance.now() - pdfLoadStartTime
-    console.log(`[PERF] PDF loading completed in ${pdfLoadTime.toFixed(2)}ms`)
+    console.log(
+      `[PERF] PDF loading completed in ${pdfLoadTime.toFixed(2)}ms (file: ${fileSizeMB.toFixed(1)}MB, scale: ${scale})`,
+    )
 
     let pageCounter = 1
     let hasColoredContent = false
@@ -45,9 +68,32 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
       const totalPageTime = performance.now() - pageStartTime
       pageTimings.push(totalPageTime)
 
+      // Log memory usage and trigger garbage collection for memory management
+      const currentMemory = process.memoryUsage()
       console.log(
-        `[PERF] Page ${pageCounter}: write=${writeTime.toFixed(2)}ms, color_check=${colorCheckTime.toFixed(2)}ms, total=${totalPageTime.toFixed(2)}ms`,
+        `[PERF] Page ${pageCounter}: write=${writeTime.toFixed(2)}ms, color_check=${colorCheckTime.toFixed(2)}ms, total=${totalPageTime.toFixed(2)}ms, heap=${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
       )
+
+      // Force garbage collection every 10 pages or if memory usage is high
+      if (pageCounter % 10 === 0 || currentMemory.heapUsed > 500 * 1024 * 1024) {
+        if (global.gc) {
+          console.log(
+            `[PERF] Triggering garbage collection at page ${pageCounter}, heap: ${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
+          )
+          global.gc()
+          const afterGcMemory = process.memoryUsage()
+          console.log(
+            `[PERF] After GC: heap=${Math.round(afterGcMemory.heapUsed / 1024 / 1024)}MB (freed ${Math.round((currentMemory.heapUsed - afterGcMemory.heapUsed) / 1024 / 1024)}MB)`,
+          )
+        }
+      }
+
+      // Clean up the temporary image file immediately after processing
+      try {
+        await fs.unlink(imagePath)
+      } catch (cleanupError) {
+        console.warn(`Failed to cleanup page ${pageCounter} image:`, cleanupError)
+      }
 
       if (pageHasColor) {
         hasColoredContent = true
@@ -86,34 +132,58 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
 
 export async function isImageFullyWhite(filePath: string): Promise<boolean> {
   const sharpStartTime = performance.now()
-  const { data, info } = await sharp(filePath).resize(50, 50).raw().ensureAlpha().toBuffer({ resolveWithObject: true })
-  const sharpTime = performance.now() - sharpStartTime
 
-  const channels = info.channels // usually 4 (RGBA)
-  const length = data.length
+  // Create Sharp instance with explicit memory management
+  let sharpInstance: sharp.Sharp | null = null
+  let data: Buffer | null = null
 
-  const pixelAnalysisStartTime = performance.now()
-  for (let i = 0; i < length; i += channels) {
-    const r = data[i]
-    const g = data[i + 1]
-    const b = data[i + 2]
-    const a = channels === 4 ? data[i + 3] : 255
+  try {
+    sharpInstance = sharp(filePath)
 
-    if (!(r === 255 && g === 255 && b === 255 && a === 255)) {
-      const pixelAnalysisTime = performance.now() - pixelAnalysisStartTime
-      const totalTime = performance.now() - sharpStartTime
-      console.log(
-        `[PERF] isImageFullyWhite: sharp=${sharpTime.toFixed(2)}ms, pixel_analysis=${pixelAnalysisTime.toFixed(2)}ms, total=${totalTime.toFixed(2)}ms (found color)`,
-      )
-      return false
+    // Use smaller resize for memory efficiency and limit concurrent operations
+    const result = await sharpInstance
+      .resize(30, 30, { fit: 'inside' }) // Smaller size to reduce memory usage
+      .raw()
+      .ensureAlpha()
+      .toBuffer({ resolveWithObject: true })
+
+    data = result.data
+    const info = result.info
+    const sharpTime = performance.now() - sharpStartTime
+
+    const channels = info.channels // usually 4 (RGBA)
+    const length = data.length
+
+    const pixelAnalysisStartTime = performance.now()
+    for (let i = 0; i < length; i += channels) {
+      const r = data[i]
+      const g = data[i + 1]
+      const b = data[i + 2]
+      const a = channels === 4 ? data[i + 3] : 255
+
+      if (!(r === 255 && g === 255 && b === 255 && a === 255)) {
+        const pixelAnalysisTime = performance.now() - pixelAnalysisStartTime
+        const totalTime = performance.now() - sharpStartTime
+        console.log(
+          `[PERF] isImageFullyWhite: sharp=${sharpTime.toFixed(2)}ms, pixel_analysis=${pixelAnalysisTime.toFixed(2)}ms, total=${totalTime.toFixed(2)}ms (found color)`,
+        )
+        return false
+      }
     }
+    const pixelAnalysisTime = performance.now() - pixelAnalysisStartTime
+    const totalTime = performance.now() - sharpStartTime
+    console.log(
+      `[PERF] isImageFullyWhite: sharp=${sharpTime.toFixed(2)}ms, pixel_analysis=${pixelAnalysisTime.toFixed(2)}ms, total=${totalTime.toFixed(2)}ms (fully white)`,
+    )
+    return true
+  } finally {
+    // Explicitly destroy Sharp instance and clear references
+    if (sharpInstance) {
+      sharpInstance.destroy()
+    }
+    data = null
+    sharpInstance = null
   }
-  const pixelAnalysisTime = performance.now() - pixelAnalysisStartTime
-  const totalTime = performance.now() - sharpStartTime
-  console.log(
-    `[PERF] isImageFullyWhite: sharp=${sharpTime.toFixed(2)}ms, pixel_analysis=${pixelAnalysisTime.toFixed(2)}ms, total=${totalTime.toFixed(2)}ms (fully white)`,
-  )
-  return true
 }
 async function cleanupTmpDir(tmpDir: string): Promise<void> {
   try {
