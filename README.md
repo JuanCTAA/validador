@@ -19,24 +19,25 @@ The PDF Validation API is a Node.js Express API that provides a simple endpoint 
 
 
 
+
 ## Performance Results
 
 ### Summary
-- **Total tests run**: 120
+- **Total tests run**: 135
 ### Recent Test Results
 
 | File | Duration (s) | Performance Change |
 |------|--------------|--------------------|
-| valid_006_22mbs.pdf | 0.05 | N/A |
-| valid_007_6mbs.pdf | 0.05 | N/A |
+| valid_006_22mbs.pdf | 0.06 | N/A |
+| valid_007_6mbs.pdf | 0.06 | N/A |
 | invalid_001_7mbs.pdf | 0.05 | N/A |
-| invalid_002_20mbs.pdf | 0.06 | N/A |
+| invalid_002_20mbs.pdf | 0.05 | N/A |
 | invalid_003_0mbs.pdf | 0.06 | N/A |
-| invalid_004_44mbs.pdf | 0.06 | ⚪ 4.2% similar |
-| invalid_005_60mbs.pdf | 0.06 | 🔴 5.8% slower |
-| invalid_006_15mbs.pdf | 0.06 | 🔴 6.6% slower |
-| invalid_007_4mbs.pdf | 0.05 | ⚪ 2.4% similar |
-| invalid_008_0mbs.pdf | 0.05 | ⚪ 2.6% similar |
+| invalid_004_44mbs.pdf | 0.05 | ⚪ 4.1% similar |
+| invalid_005_60mbs.pdf | 0.06 | 🔴 8.5% slower |
+| invalid_006_15mbs.pdf | 0.05 | ⚪ 2.6% similar |
+| invalid_007_4mbs.pdf | 0.05 | ⚪ 0.3% similar |
+| invalid_008_0mbs.pdf | 0.05 | ⚪ 1.6% similar |
 
 *Performance results are automatically updated by GitHub Actions after each test run.*
 

@@ -1439,10 +1439,190 @@
       "nodeVersion": "v22.19.0",
       "platform": "linux",
       "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:46.565Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_001_216mbs.pdf",
+      "fileSize": 134,
+      "duration": 77.432996,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:46.626Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_002_340mbs.pdf",
+      "fileSize": 134,
+      "duration": 54.645789000000036,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:46.685Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_003_172mbs.pdf",
+      "fileSize": 134,
+      "duration": 53.43707299999994,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:46.744Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_004_9mbs.pdf",
+      "fileSize": 132,
+      "duration": 52.73894700000005,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:46.806Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_005_47mbs.pdf",
+      "fileSize": 133,
+      "duration": 57.19946699999991,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:46.870Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_006_22mbs.pdf",
+      "fileSize": 133,
+      "duration": 58.651580000000195,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:46.933Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_007_6mbs.pdf",
+      "fileSize": 132,
+      "duration": 56.432154999999966,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:46.991Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_001_7mbs.pdf",
+      "fileSize": 132,
+      "duration": 52.75897299999997,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:47.052Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_002_20mbs.pdf",
+      "fileSize": 133,
+      "duration": 54.71557799999982,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:47.113Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_003_0mbs.pdf",
+      "fileSize": 130,
+      "duration": 55.58300600000007,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:47.172Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_004_44mbs.pdf",
+      "fileSize": 133,
+      "duration": 53.37392199999999,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:47.238Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_005_60mbs.pdf",
+      "fileSize": 133,
+      "duration": 60.15640899999994,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:47.299Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_006_15mbs.pdf",
+      "fileSize": 133,
+      "duration": 54.7953399999999,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:47.358Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_007_4mbs.pdf",
+      "fileSize": 132,
+      "duration": 54.065916000000016,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-15T14:14:47.418Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_008_0mbs.pdf",
+      "fileSize": 130,
+      "duration": 54.60879899999986,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.20.0",
+      "platform": "linux",
+      "arch": "x64"
     }
   ],
   "summary": {
-    "lastRun": "2025-09-19T09:49:57.617Z",
-    "totalTests": 120
+    "lastRun": "2025-10-15T14:14:47.418Z",
+    "totalTests": 135
   }
 }
