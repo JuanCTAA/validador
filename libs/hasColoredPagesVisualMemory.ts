@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import { pdf } from 'pdf-to-img'
+import { fromPath } from 'pdf2pic'
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs'
 import sharp from 'sharp'
 
 export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean> => {
@@ -24,32 +25,66 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
     const cleanupTime = performance.now() - cleanupStartTime
     console.log(`[PERF] Directory setup completed in ${cleanupTime.toFixed(2)}ms`)
 
-    // Load PDF document with lower scale for memory efficiency
+    // Load PDF document with pdf2pic for better memory efficiency
     const pdfLoadStartTime = performance.now()
 
-    // Get file size to determine appropriate scale
+    // Get file size to determine appropriate density
     const fileStats = await fs.stat(inputFile)
     const fileSizeMB = fileStats.size / (1024 * 1024)
 
-    const scale = 0.2
-    const document = await pdf(inputFile, { scale })
+    // Use lower density for larger files to reduce memory usage
+    let density = 72
+    if (fileSizeMB > 50) {
+      density = 50 // Very large files
+    } else if (fileSizeMB > 20) {
+      density = 60 // Large files
+    }
+
+    const options = {
+      density,
+      format: 'png' as const,
+      width: 400,
+      height: 400,
+      preserveAspectRatio: true,
+      saveFilename: 'page',
+      savePath: tmpDir,
+    }
+
+    const convert = fromPath(inputFile, options)
     const pdfLoadTime = performance.now() - pdfLoadStartTime
     console.log(
-      `[PERF] PDF loading completed in ${pdfLoadTime.toFixed(2)}ms (file: ${fileSizeMB.toFixed(1)}MB, scale: ${scale})`,
+      `[PERF] PDF converter initialized in ${pdfLoadTime.toFixed(2)}ms (file: ${fileSizeMB.toFixed(1)}MB, density: ${density})`,
     )
 
-    let pageCounter = 1
     let hasColoredContent = false
 
-    // Process each page
-    for await (const page of document) {
+    // Get total page count using pdfjs-dist
+    const pageCountStartTime = performance.now()
+    const pdfBuffer = await fs.readFile(inputFile)
+    const pdfDataArray = new Uint8Array(pdfBuffer)
+    const pdfDocument = await pdfjsLib.getDocument({
+      data: pdfDataArray,
+      standardFontDataUrl: path.join(process.cwd(), 'node_modules/pdfjs-dist/standard_fonts/'),
+    }).promise
+    const totalPages = pdfDocument.numPages
+    const pageCountTime = performance.now() - pageCountStartTime
+    console.log(`[DEBUG] PDF has ${totalPages} pages (detected in ${pageCountTime.toFixed(2)}ms)`)
+
+    // Process each page individually using page-by-page conversion
+    for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
       const pageStartTime = performance.now()
 
-      // Write image to disk
-      const writeStartTime = performance.now()
-      const imagePath = path.join(tmpDir, `page${pageCounter}.jpeg`)
-      await fs.writeFile(imagePath, page)
-      const writeTime = performance.now() - writeStartTime
+      // Convert single page
+      const convertStartTime = performance.now()
+      const result = await convert(pageNumber, { responseType: 'image' })
+      const convertTime = performance.now() - convertStartTime
+
+      if (!result || !result.path) {
+        console.log(`[DEBUG] No result or path for page ${pageNumber}, skipping`)
+        continue
+      }
+
+      const imagePath = result.path
 
       // Check if this page has colored pixels
       const colorCheckStartTime = performance.now()
@@ -62,29 +97,41 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
       // Log memory usage and trigger garbage collection for memory management
       const currentMemory = process.memoryUsage()
       console.log(
-        `[PERF] Page ${pageCounter}: write=${writeTime.toFixed(2)}ms, color_check=${colorCheckTime.toFixed(2)}ms, total=${totalPageTime.toFixed(2)}ms, heap=${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
+        `[PERF] Page ${pageNumber}: convert=${convertTime.toFixed(2)}ms, color_check=${colorCheckTime.toFixed(2)}ms, total=${totalPageTime.toFixed(2)}ms, heap=${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
       )
+
+      // Force garbage collection every 10 pages or if memory usage is high
+      if (pageNumber % 10 === 0 || currentMemory.heapUsed > 500 * 1024 * 1024) {
+        if (global.gc) {
+          console.log(
+            `[PERF] Triggering garbage collection at page ${pageNumber}, heap: ${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
+          )
+          global.gc()
+          const afterGcMemory = process.memoryUsage()
+          console.log(
+            `[PERF] After GC: heap=${Math.round(afterGcMemory.heapUsed / 1024 / 1024)}MB (freed ${Math.round((currentMemory.heapUsed - afterGcMemory.heapUsed) / 1024 / 1024)}MB)`,
+          )
+        }
+      }
 
       // Clean up the temporary image file immediately after processing
       try {
         await fs.unlink(imagePath)
       } catch (cleanupError) {
-        console.warn(`Failed to cleanup page ${pageCounter} image:`, cleanupError)
+        console.warn(`Failed to cleanup page ${pageNumber} image:`, cleanupError)
       }
 
       if (pageHasColor) {
         hasColoredContent = true
-        console.log(`Page ${pageCounter} has no colored pixels`)
+        console.log(`Page ${pageNumber} has no colored pixels`)
         break // Early exit when we find colored content
       }
-
-      pageCounter++
     }
 
     const totalProcessingTime = performance.now() - startTime
     const avgPageTime = pageTimings.length > 0 ? pageTimings.reduce((a, b) => a + b, 0) / pageTimings.length : 0
     console.log(
-      `[PERF] Processing completed: ${pageCounter - 1} pages in ${totalProcessingTime.toFixed(2)}ms (avg ${avgPageTime.toFixed(2)}ms/page)`,
+      `[PERF] Processing completed: ${pageTimings.length} pages in ${totalProcessingTime.toFixed(2)}ms (avg ${avgPageTime.toFixed(2)}ms/page)`,
     )
 
     return hasColoredContent

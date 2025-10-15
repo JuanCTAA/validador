@@ -3,7 +3,7 @@ import fs from 'fs'
 import multer from 'multer'
 import { performance } from 'perf_hooks'
 import { promisify } from 'util'
-import { hasColoredPagesVisual } from '../libs/hasColoredPagesVisual'
+import { hasColoredPagesVisual } from '../libs/hasColoredPagesVisualMemory'
 
 const router: Router = express.Router()
 
