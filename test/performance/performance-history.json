@@ -1439,10 +1439,190 @@
       "nodeVersion": "v22.19.0",
       "platform": "linux",
       "arch": "x64"
+    },
+    {
+      "timestamp": "2025-10-27T10:27:46.044Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_001_216mbs.pdf",
+      "fileSize": 226956771,
+      "duration": 33288.09825,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:29:09.779Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_002_340mbs.pdf",
+      "fileSize": 356769435,
+      "duration": 83717.35641600001,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:29:44.237Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_003_172mbs.pdf",
+      "fileSize": 180475175,
+      "duration": 34440.34350000002,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:29:52.379Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_004_9mbs.pdf",
+      "fileSize": 9216913,
+      "duration": 8124.173708000017,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:29:54.252Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_005_47mbs.pdf",
+      "fileSize": 49234556,
+      "duration": 1857.2306659999886,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:05.152Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_006_22mbs.pdf",
+      "fileSize": 22932201,
+      "duration": 10887.027999999991,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:07.247Z",
+      "testName": "Valid PDF Test",
+      "filename": "valid_007_6mbs.pdf",
+      "fileSize": 5891929,
+      "duration": 2082.847207999992,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:09.503Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_001_7mbs.pdf",
+      "fileSize": 7201035,
+      "duration": 2242.1182499999995,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:12.972Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_002_20mbs.pdf",
+      "fileSize": 21222622,
+      "duration": 3452.1656250000233,
+      "isValid": true,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:13.068Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_003_0mbs.pdf",
+      "fileSize": 34477,
+      "duration": 84.10324999998556,
+      "isValid": false,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:20.477Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_004_44mbs.pdf",
+      "fileSize": 45822292,
+      "duration": 7397.476834000001,
+      "isValid": false,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:38.671Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_005_60mbs.pdf",
+      "fileSize": 63271349,
+      "duration": 18180.16954100001,
+      "isValid": false,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:41.683Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_006_15mbs.pdf",
+      "fileSize": 15333878,
+      "duration": 2997.504958000005,
+      "isValid": false,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:42.592Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_007_4mbs.pdf",
+      "fileSize": 4364557,
+      "duration": 894.5462920000136,
+      "isValid": false,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    {
+      "timestamp": "2025-10-27T10:30:42.725Z",
+      "testName": "Invalid PDF Test",
+      "filename": "invalid_008_0mbs.pdf",
+      "fileSize": 13139,
+      "duration": 118.87045799999032,
+      "isValid": false,
+      "gitCommit": "2dd6cc2c19beac59f238a95fe45af0047b42eb5b",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64"
     }
   ],
   "summary": {
-    "lastRun": "2025-09-19T09:49:57.617Z",
-    "totalTests": 120
+    "lastRun": "2025-10-27T10:30:42.725Z",
+    "totalTests": 135
   }
 }
