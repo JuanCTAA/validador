@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto'
 import fs from 'fs'
 import path from 'path'
 
-export const hasEmptyPagesGhostscript = async (inputFile: string): Promise<boolean> => {
+export const isInvalid_text_ghostscriptV2 = async (inputFile: string): Promise<boolean> => {
   try {
     checkGhostscriptInstalled()
     console.log(`Checking for empty pages in ${inputFile}`)

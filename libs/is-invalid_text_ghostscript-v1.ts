@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 import fs from 'fs'
 
-export const hasEmptyPagesGhostscript = async (inputFile: string): Promise<boolean> => {
+export const isInvalid_text_ghostscriptV1 = async (inputFile: string): Promise<boolean> => {
   try {
     checkGhostscriptInstalled()
     console.log(`Checking for empty pages in ${inputFile}`)

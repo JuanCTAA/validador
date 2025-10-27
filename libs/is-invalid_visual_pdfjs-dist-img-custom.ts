@@ -1,9 +1,9 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import { pdf } from 'pdf-to-img'
 import sharp from 'sharp'
+import { pdf } from './convert-pdf-to-img'
 
-export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean> => {
+export const isInvalidVisualPdfjsDistImgCustom = async (inputFile: string): Promise<boolean> => {
   const startTime = performance.now()
   console.log(`[PERF] Starting hasColoredPagesVisual for file: ${inputFile}`)
 
@@ -14,7 +14,7 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
   )
 
   const tmpDir = path.join(process.cwd(), 'tmp-pdf-images')
-  const pageTimings: number[] = []
+  const imagePaths: string[] = []
 
   try {
     // Create temporary directory
@@ -47,83 +47,101 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
       `[PERF] PDF loading completed in ${pdfLoadTime.toFixed(2)}ms (file: ${fileSizeMB.toFixed(1)}MB, scale: ${scale})`,
     )
 
+    // PHASE 1: Generate all images first and save to disk
+    console.log(`[PERF] Phase 1: Generating all page images...`)
+    const imageGenerationStartTime = performance.now()
     let pageCounter = 1
-    let hasColoredContent = false
 
-    // Process each page
     for await (const imageBuffer of document) {
-      const pageStartTime = performance.now()
-
-      // Write image to disk
-      const writeStartTime = performance.now()
       const imagePath = path.join(tmpDir, `page${pageCounter}.jpeg`)
       await fs.writeFile(imagePath, imageBuffer)
-      const writeTime = performance.now() - writeStartTime
+      imagePaths.push(imagePath)
 
-      // Check if this page has colored pixels
-      const colorCheckStartTime = performance.now()
-      const pageHasColor = await isImageFullyWhite(imagePath)
-      const colorCheckTime = performance.now() - colorCheckStartTime
+      // Log progress every 100 pages
+      if (pageCounter % 100 === 0) {
+        const currentMemory = process.memoryUsage()
+        console.log(
+          `[PERF] Generated ${pageCounter} images, heap=${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
+        )
 
-      const totalPageTime = performance.now() - pageStartTime
-      pageTimings.push(totalPageTime)
-
-      // Log memory usage and trigger garbage collection for memory management
-      const currentMemory = process.memoryUsage()
-      console.log(
-        `[PERF] Page ${pageCounter}: write=${writeTime.toFixed(2)}ms, color_check=${colorCheckTime.toFixed(2)}ms, total=${totalPageTime.toFixed(2)}ms, heap=${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
-      )
-
-      // Force garbage collection every 10 pages or if memory usage is high
-      if (pageCounter % 10 === 0 || currentMemory.heapUsed > 500 * 1024 * 1024) {
+        // Force garbage collection every 100 pages to manage memory
         if (global.gc) {
-          console.log(
-            `[PERF] Triggering garbage collection at page ${pageCounter}, heap: ${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
-          )
           global.gc()
           const afterGcMemory = process.memoryUsage()
-          console.log(
-            `[PERF] After GC: heap=${Math.round(afterGcMemory.heapUsed / 1024 / 1024)}MB (freed ${Math.round((currentMemory.heapUsed - afterGcMemory.heapUsed) / 1024 / 1024)}MB)`,
-          )
+          console.log(`[PERF] After GC: heap=${Math.round(afterGcMemory.heapUsed / 1024 / 1024)}MB`)
         }
-      }
-
-      // Clean up the temporary image file immediately after processing
-      try {
-        await fs.unlink(imagePath)
-      } catch (cleanupError) {
-        console.warn(`Failed to cleanup page ${pageCounter} image:`, cleanupError)
-      }
-
-      if (pageHasColor) {
-        hasColoredContent = true
-        console.log(`Page ${pageCounter} has no colored pixels`)
-        break // Early exit when we find colored content
       }
 
       pageCounter++
     }
 
-    const totalProcessingTime = performance.now() - startTime
-    const avgPageTime = pageTimings.length > 0 ? pageTimings.reduce((a, b) => a + b, 0) / pageTimings.length : 0
+    await document.destroy()
+
+    const imageGenerationTime = performance.now() - imageGenerationStartTime
     console.log(
-      `[PERF] Processing completed: ${pageCounter - 1} pages in ${totalProcessingTime.toFixed(2)}ms (avg ${avgPageTime.toFixed(2)}ms/page)`,
+      `[PERF] Phase 1 completed: Generated ${imagePaths.length} images in ${imageGenerationTime.toFixed(2)}ms`,
     )
+
+    // Log memory after image generation phase
+    const afterGenerationMemory = process.memoryUsage()
+    console.log(`[PERF] Memory after generation: ${Math.round(afterGenerationMemory.heapUsed / 1024 / 1024)}MB heap`)
+
+    // PHASE 2: Process images sequentially for color detection
+    console.log(`[PERF] Phase 2: Checking images for colored content...`)
+    const colorCheckStartTime = performance.now()
+    let hasColoredContent = false
+
+    for (let i = 0; i < imagePaths.length; i++) {
+      const pageStartTime = performance.now()
+      const imagePath = imagePaths[i]
+      if (!imagePath) continue // Skip if path is undefined (shouldn't happen)
+      const pageNum = i + 1
+
+      // Check if this page has colored pixels
+      const pageHasColor = await isImageFullyWhite(imagePath)
+      const totalPageTime = performance.now() - pageStartTime
+
+      // Log memory usage periodically
+      if (pageNum % 100 === 0) {
+        const currentMemory = process.memoryUsage()
+        console.log(
+          `[PERF] Page ${pageNum}: color_check=${totalPageTime.toFixed(2)}ms, heap=${Math.round(currentMemory.heapUsed / 1024 / 1024)}MB`,
+        )
+      }
+
+      if (pageHasColor) {
+        hasColoredContent = true
+        console.log(`[PERF] Page ${pageNum} has colored pixels - early exit`)
+        break // Early exit when we find colored content
+      }
+    }
+
+    const colorCheckTime = performance.now() - colorCheckStartTime
+    console.log(`[PERF] Phase 2 completed: Color checking took ${colorCheckTime.toFixed(2)}ms`)
+
+    const totalProcessingTime = performance.now() - startTime
+    console.log(`[PERF] Processing completed: ${imagePaths.length} pages in ${totalProcessingTime.toFixed(2)}ms`)
 
     return hasColoredContent
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     throw new Error(`Error checking for colored pages: ${errorMessage}`)
   } finally {
-    // Clean up temporary files
+    // PHASE 3: Clean up all temporary files
+    console.log(`[PERF] Phase 3: Cleaning up ${imagePaths.length} temporary files...`)
+    const cleanupStartTime = performance.now()
+
     try {
-      const cleanupStartTime = performance.now()
       await cleanupTmpDir(tmpDir)
       const cleanupTime = performance.now() - cleanupStartTime
       console.log(`[PERF] Final cleanup completed in ${cleanupTime.toFixed(2)}ms`)
     } catch (cleanupError) {
       console.warn('Failed to cleanup temporary directory:', cleanupError)
     }
+
+    // Final memory check
+    const finalMemory = process.memoryUsage()
+    console.log(`[PERF] Final memory: ${Math.round(finalMemory.heapUsed / 1024 / 1024)}MB heap`)
 
     const totalTime = performance.now() - startTime
     console.log(`[PERF] Total execution time: ${totalTime.toFixed(2)}ms`)

@@ -3,10 +3,10 @@ import fs from 'fs'
 import multer from 'multer'
 import { performance } from 'perf_hooks'
 import { promisify } from 'util'
-import { hasColoredPagesVisual } from '../libs/hasColoredPagesVisualMemory'
+import { isInvalidVisualPdfjsDistImgCustom } from '../libs/is-invalid_visual_pdfjs-dist-img-custom'
 
 const router: Router = express.Router()
-
+const tmpDir = './tmp-pdf'
 const unlinkAsync = promisify(fs.unlink)
 
 const calculateProcessingTime = (startTime: number): number => {
@@ -44,9 +44,8 @@ const validateUploadedFile = (file: Express.Multer.File | undefined): string | n
 // Define storage using multer.diskStorage
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    const path = './'
-    fs.mkdirSync(path, { recursive: true }) // Create the directory if it doesn't exist
-    cb(null, path)
+    fs.mkdirSync(tmpDir, { recursive: true }) // Create the directory if it doesn't exist
+    cb(null, tmpDir)
   },
   filename: (_req, file, cb) => {
     cb(null, file.originalname)
@@ -134,7 +133,7 @@ router.post('/validate-pdf', upload.single('pdf'), async (req: Request, res: Res
     console.log('PDF file uploaded')
 
     // Process the PDF
-    const isInvalid = await hasColoredPagesVisual(req.file!.path)
+    const isInvalid = await isInvalidVisualPdfjsDistImgCustom(req.file!.path)
     const processingTime = calculateProcessingTime(startTime)
     console.log(`The pdf is ${isInvalid ? 'invalid' : 'valid'} (processed in ${Math.round(processingTime)} ms)`)
 
@@ -150,10 +149,20 @@ router.post('/validate-pdf', upload.single('pdf'), async (req: Request, res: Res
     console.error(`An error occured while validating the PDF: ${errorMessage}`)
     sendErrorResponse(res, 500, 'An error occured while validating the PDF', processingTime, errorMessage)
   } finally {
-    if (req.file?.path) {
-      console.log('Deleting the file')
-      await unlinkAsync(req.file.path)
-      console.log('File deleted')
+    if (req.file) {
+      const filePath = req.file.path ?? `${tmpDir}/${req.file.filename}`
+      try {
+        console.log(`Deleting the file: ${filePath}`)
+        if (fs.existsSync(filePath)) {
+          await unlinkAsync(filePath)
+          console.log('File deleted')
+        } else {
+          console.warn('File not found for deletion:', filePath)
+        }
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e)
+        console.error('Failed to delete uploaded file:', msg)
+      }
     }
   }
 })

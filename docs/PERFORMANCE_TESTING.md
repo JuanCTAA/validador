@@ -157,7 +157,7 @@ When optimizing the validation algorithm:
 2. **Check system resources** during test runs
 
 3. **Profile individual PDF processing**:
-   - Add console logs to `hasEmptyPagesGhostscript.ts`
+   - Add console logs to `is-invalid_text_ghostscript-v1.ts`
    - Run single file tests
 
 ### CI/CD Debugging

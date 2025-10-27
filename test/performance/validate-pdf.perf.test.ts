@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { performance } from 'perf_hooks'
 import { describe, test } from 'vitest'
-import { hasEmptyPagesGhostscript } from '../../libs/hasEmptyPagesGhostscript.js'
+import { isInvalid_text_ghostscriptV1 } from '../../libs/is-invalid_text_ghostscript-v1'
 
 interface PerformanceResult {
   timestamp: string
@@ -99,7 +99,7 @@ async function measurePerformance(
   console.log(`🚀 Performance test: ${testName} - ${filename} (${(fileSize / 1024).toFixed(2)} KB)`)
 
   const startTime = performance.now()
-  const isValid = !(await hasEmptyPagesGhostscript(filePath))
+  const isValid = !(await isInvalid_text_ghostscriptV1(filePath))
   const endTime = performance.now()
 
   const duration = endTime - startTime

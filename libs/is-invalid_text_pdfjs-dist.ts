@@ -2,9 +2,9 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs'
 
-export const hasEmptyPagesVisual = async (inputFile: string): Promise<boolean> => {
+export const isInvalid_text_pdfjsDist = async (inputFile: string): Promise<boolean> => {
   try {
-    const visualResult = await checkPagesVisually(inputFile)
+    const visualResult = await checkPagesByText(inputFile)
     return visualResult
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
@@ -12,7 +12,7 @@ export const hasEmptyPagesVisual = async (inputFile: string): Promise<boolean> =
   }
 }
 
-async function checkPagesVisually(inputFile: string): Promise<boolean> {
+async function checkPagesByText(inputFile: string): Promise<boolean> {
   // Read the PDF file into a buffer and then
   // parse it with PDF.js
   const pdfData = await fs.readFile(inputFile)
