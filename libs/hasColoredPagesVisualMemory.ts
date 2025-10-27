@@ -75,6 +75,8 @@ export const hasColoredPagesVisual = async (inputFile: string): Promise<boolean>
       pageCounter++
     }
 
+    await document.destroy()
+
     const imageGenerationTime = performance.now() - imageGenerationStartTime
     console.log(
       `[PERF] Phase 1 completed: Generated ${imagePaths.length} images in ${imageGenerationTime.toFixed(2)}ms`,
