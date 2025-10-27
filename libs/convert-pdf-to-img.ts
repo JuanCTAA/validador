@@ -106,12 +106,12 @@ export async function pdf(
     metadata: sanitize<PdfMetadata>(metadata.info ?? {}),
     getPage,
     [Symbol.asyncIterator]() {
+      let pg = 0
       return {
-        pg: 0,
         async next() {
-          if (this.pg < pdfDocument.numPages) {
-            this.pg += 1
-            return { done: false, value: await getPage(this.pg) }
+          if (pg < pdfDocument.numPages) {
+            pg += 1
+            return { done: false, value: await getPage(pg) }
           }
           return { done: true, value: undefined as any }
         },

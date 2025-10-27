@@ -6,11 +6,6 @@ export default defineConfig({
     testTimeout: 30 * 1000, // 30 seconds default for unit tests
     hookTimeout: 10 * 1000, // 10 seconds for setup/teardown
     pool: 'threads',
-    poolOptions: {
-      threads: {
-        singleThread: false,
-      },
-    },
     teardownTimeout: 5 * 1000,
     watch: false,
     reporters: process.env.CI ? 'verbose' : 'default',
